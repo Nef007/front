@@ -1,0 +1,82 @@
+import { useState } from "react";
+import { useRootStore } from "../store";
+export const TableContact = ({ contacts }) => {
+  return (
+    <div className="panel-body table-responsive">
+      <table className="table table-striped table-bordered table-list table-hover align-middle contacts-table">
+        <thead>
+          <tr>
+            <th className="width-5">
+              <em className="fa fa-check"></em>
+            </th>
+            <th className="width-10">
+              <em className="fa fa-cog"></em>
+            </th>
+            <th className="hidden-xs width-5">
+              ID{" "}
+              <a
+                href="src/page/contact/Contact.page#"
+                className="sort-arrow-down sort-arrow-active"
+              >
+                <em className="fa fa-arrow-down"></em>
+              </a>
+            </th>
+            <th className="width-10">
+              Имя{" "}
+              <a
+                href="src/page/contact/Contact.page#"
+                className="sort-arrow-up sort-arrow-active"
+              >
+                <em className="fa fa-arrow-up"></em>
+              </a>
+            </th>
+            <th className="width-20">Почта</th>
+            <th className="width-10">Телефон</th>
+            <th className="width-40">Теги</th>
+          </tr>
+        </thead>
+        <tbody>
+          {contacts.map((item) => (
+            <tr>
+              <td>
+                <div className="form-check">
+                  <label className="form-check-label">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                    />
+                  </label>
+                </div>
+              </td>
+              <td>
+                <a
+                  className="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#contactsEditModal"
+                >
+                  <em className="fa fa-pencil"></em>
+                </a>
+                <a className="btn btn-danger">
+                  <em className="fa fa-trash"></em>
+                </a>
+              </td>
+              <td className="hidden-xs">1</td>
+              <td>John Doe</td>
+              <td>johndoe@example.com</td>
+              <td>+7 999 999 99 99</td>
+              <td>
+                <input
+                  className="tags"
+                  name="tags1"
+                  value='[{"value":"point"}, {"value":"soft"}]'
+                  pattern="^[A-Za-z_✲ ]{1,15}$"
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};

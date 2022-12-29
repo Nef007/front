@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ru-RU">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Contacts</title>
+
+	<link rel='stylesheet' href='assets/css/normalize.css' type='text/css' media='all' />
+	<link rel='stylesheet' href='assets/css/bootstrap.min.css' type='text/css' media='all' />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+	<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+	<link rel='stylesheet' href='assets/css/main.css' type='text/css' media='all' />
+</head>
+<body>
+<header class="header">
+	<div class="container header__container">
+		<h1 class="logo"><a href="#" class="logo__img">Contacts base</a></h1>
+		<input id="menu-toggle" type="checkbox"/>
+		<label class="menu-button-container" for="menu-toggle">
+			<span class="menu-button"></span>
+		</label>
+		<nav class="main-nav">
+			<ul>
+				<li><a href="#" class="active">Контакты</a></li>
+				<li><a href="#">Теги</a></li>
+			</ul>
+		</nav>
+	</div><!--.container-->
+</header><!--.header-->
+
+<main class="main-content">
+	<div class="container">
+		<div class="page-content page-content_contacts"><!-- page-content begin -->
+			<h2 class="page-title page-title_contacts">База контактов</h2>
+
+			<div class="contacts-table-container"><!-- contacts-table-container begin -->
+				<div class="col-md-12"><!-- col-md-12 begin -->
+					<div class="panel panel-default panel-table"><!-- panel begin -->
+						<div class="panel-heading"><!-- panel-heading begin -->
+							<div class="row">
+								<div class="col col-sm-6 col-12 text-sm-center gy-2">
+									<form action="#">
+										<div class="mb-3">
+											<div class="input-group input-group-sm">
+												<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon03">Загрузить</button>
+												<input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+												<button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Выгрузить</button>
+											</div>
+										</div>
+
+										<div class="input-group input-group-sm">
+											<input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
+											<button type="button" class="btn btn-outline-secondary">Поиск</button>
+											<button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+												<span class="visually-hidden">Toggle Dropdown</span>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-end">
+												<li><a class="dropdown-item" href="#">Фильтр 1</a></li>
+												<li><a class="dropdown-item" href="#">Фильтр 2</a></li>
+												<li><a class="dropdown-item" href="#">Фильтр 3</a></li>
+											</ul>
+										</div>
+									</form>
+								</div>
+								<div class="col col-sm-6 text-end col-12 gy-2">
+									<button type="button" class="btn btn-sm btn-primary btn-create">Выбрать все</button>
+									<button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#multipleTagsEditModal"><em class="fa fa-pencil"></em></button>
+									<button class="btn btn-sm btn-danger disabled"><em class="fa fa-trash"></em></button>
+									<button type="button" class="btn btn-sm btn-primary btn-create">Создать</button>
+								</div>
+							</div>
+						</div><!-- panel-heading end -->
+						<div class="panel-body table-responsive"><!-- panel-body begin -->
+							<table class="table table-striped table-bordered table-list table-hover align-middle contacts-table">
+								<thead>
+								<tr>
+									<th class="width-5"><em class="fa fa-check"></em></th>
+									<th class="width-10"><em class="fa fa-cog"></em></th>
+									<th class="hidden-xs width-5">ID <a href="#" class="sort-arrow-down sort-arrow-active"><em class="fa fa-arrow-down"></em></a></th>
+									<th class="width-10">Имя <a href="#" class="sort-arrow-up sort-arrow-active"><em class="fa fa-arrow-up"></em></a></th>
+									<th class="width-20">Почта</th>
+									<th class="width-10">Телефон</th>
+									<th class="width-40">Теги</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr>
+									<td>
+										<div class="form-check">
+										<label class="form-check-label">
+											<input class="form-check-input" type="checkbox" value="">
+										</label>
+									</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags1' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags2' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags3' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags4' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr><tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags5' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags6' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags7' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags8' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags9' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags10' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags11' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags12' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags13' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags14' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-check">
+											<label class="form-check-label">
+												<input class="form-check-input" type="checkbox" value="">
+											</label>
+										</div>
+									</td>
+									<td>
+										<a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactsEditModal"><em class="fa fa-pencil"></em></a>
+										<a class="btn btn-danger"><em class="fa fa-trash"></em></a>
+									</td>
+									<td class="hidden-xs">1</td>
+									<td>John Doe</td>
+									<td>johndoe@example.com</td>
+									<td>+7 999 999 99 99</td>
+									<td><input class="tags" name='tags15' value='[{"value":"point"}, {"value":"soft"}]' pattern='^[A-Za-z_✲ ]{1,15}$'></td>
+								</tr>
+								</tbody>
+							</table>
+						</div><!-- panel-body end -->
+						<div class="panel-footer"><!-- panel-footer begin -->
+							<div class="row">
+								<div class="col col-12 col-sm-4">Страница 1 из 5</div>
+								<div class="col col-12 col-sm-8 text-sm-center">
+									<nav aria-label="Page navigation example" role="navigation">
+										<ul class="pagination justify-content-end">
+											<li class="page-item disabled">
+												<a class="page-link">Предыдущая</a>
+											</li>
+											<li class="page-item"><a class="page-link" href="#">1</a></li>
+											<li class="page-item"><a class="page-link" href="#">2</a></li>
+											<li class="page-item"><a class="page-link" href="#">3</a></li>
+											<li class="page-item">
+												<a class="page-link" href="#">Следующая</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div><!-- panel-footer end -->
+					</div><!-- panel end -->
+				</div><!-- col-md-12 end -->
+			</div><!-- contact-table-container end -->
+		</div><!-- page-content end -->
+	</div><!-- container end -->
+</main><!-- main-content end -->
+
+<footer class="footer" id="footer">
+	<div class="container">
+		<div class="row">
+			<div class="col col-12 d-flex justify-content-end">
+				<p class="footer__copyright">Разработчик <a href="https://nikita.global/" target="_blank">nikita.global</a></p>
+			</div>
+		</div>
+	</div>
+</footer><!--.footer-->
+
+
+
+<div class="modal fade" id="multipleTagsEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"><!-- modal begin -->
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5">Массовое редактирование тегов</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="mb-3">
+						<input name='basic' value='tag1, tag2, tag3, tag4, tag5, tag6, tag7, tag8'>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+				<button type="button" class="btn btn-primary">Сохранить</button>
+			</div>
+		</div>
+	</div>
+</div><!-- modal end -->
+
+<button id="scrollToTopBtn">To The Top</button>
+<!-- Facta, non verba -->
+<script src="assets/js/jquery/jquery.js"></script>
+<script src="assets/js/bootstrap/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
