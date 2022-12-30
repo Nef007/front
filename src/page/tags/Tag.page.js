@@ -10,7 +10,7 @@ import { ModalTagsCreate } from "./ModalTagsCreate";
 
 export const TagPage = observer(() => {
   const { tagsStore } = useRootStore();
-  const [activeCreate, setActiveCreate] = useToggle(false);
+ // const [activeCreate, setActiveCreate] = useToggle(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const TagPage = observer(() => {
           >
             <em className="fa fa-pencil"></em>
           </a>{" "}
-          <a className="btn btn-danger">
+          <a onClick={()=>tagsStore.delete(record.id)} className="btn btn-danger">
             <em className="fa fa-trash"></em>
           </a>
         </>
@@ -120,7 +120,7 @@ export const TagPage = observer(() => {
                         <em className="fa fa-trash"></em>
                       </button>{" "}
                       <button
-                        onClick={setActiveCreate}
+                        onClick={()=>tagsStore.setActiveCreate()}
                         type="button"
                         className="btn btn-sm btn-primary btn-create"
                       >
@@ -142,7 +142,7 @@ export const TagPage = observer(() => {
           </div>
         </div>
       </div>
-      <ModalTagsCreate active={activeCreate} onClose={setActiveCreate} />
+      <ModalTagsCreate active={tagsStore.activeCreate} onClose={()=>tagsStore.setActiveCreate()} />
     </main>
   );
 });

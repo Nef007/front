@@ -10,9 +10,11 @@ import { Footer } from "./components/Footer";
 import { TagPage } from "./page/tags/Tag.page";
 import { ContactPage } from "./page/contact/Contact.page";
 import { message } from "antd";
+import {ScrollButton} from "./components/ScrollButton";
+
 
 export const App = observer(() => {
-  const { notification } = useRootStore();
+  const { notification, tagsStore } = useRootStore();
   const { info } = notification;
 
   useEffect(() => {
@@ -23,6 +25,7 @@ export const App = observer(() => {
     }
   }, [info]);
 
+
   return (
     <>
       <Header />
@@ -31,7 +34,8 @@ export const App = observer(() => {
         <Route path="/contacts" element={<ContactPage />} />
         <Route path="/*" element={<Navigate replace to="/contacts" />} />
       </Routes>
-      {/*<button id="scrollToTopBtn">To The Top</button>*/}
+      <ScrollButton/>
+        {tagsStore.activeCreate && <div className={`modal-backdrop fade show`}></div>}
       {/*<Footer />*/}
     </>
   );

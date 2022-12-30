@@ -13,6 +13,7 @@ export const ContactPage = observer(() => {
 
   const [activeCreate, setActiveCreate] = useToggle(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [file, setFile] = useState();
 
   useEffect(() => {
     contactsStore.getAll();
@@ -21,6 +22,22 @@ export const ContactPage = observer(() => {
   const onSelectAllRows = () => {
     setSelectedRowKeys(contactsStore.contacts.map((item) => item.id));
   };
+
+  const onChangeInput = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const onUploadFile = async (e) => {
+    if (file) {
+      await contactsStore.uploadFile(file);
+    }
+  };
+  const onDownloadFile = async (e) => {
+    e.preventDefault();
+    window.location.href =
+      "http://2a5d-188-162-195-211.ngrok.io/contacts/export";
+  };
+  // await contactsStore.downloadFile();
 
   const columns = [
     {
@@ -65,17 +82,20 @@ export const ContactPage = observer(() => {
                     <form action="src/page/contact/Contact.page#">
                       <div className="mb-3">
                         <div className="input-group input-group-sm">
-                          <ButtonSecondary onClick={() => console.log("11111")}>
+                          <ButtonSecondary onClick={onUploadFile}>
                             Загрузить
                           </ButtonSecondary>
                           <input
+                            onChange={(e) => onChangeInput(e)}
                             type="file"
                             className="form-control"
                             id="inputGroupFile04"
                             aria-describedby="inputGroupFileAddon04"
                             aria-label="Upload"
                           />
-                          <ButtonSecondary>Выгрузить</ButtonSecondary>
+                          <ButtonSecondary onClick={onDownloadFile}>
+                            Выгрузить
+                          </ButtonSecondary>
                         </div>
                       </div>
 
@@ -158,6 +178,7 @@ export const ContactPage = observer(() => {
 
                 <TableCustom
                   columns={columns}
+                  loading={contactsStore.loading}
                   contacts={contactsStore.contacts}
                   selectedRowKeys={selectedRowKeys}
                   setSelectedRowKeys={setSelectedRowKeys}

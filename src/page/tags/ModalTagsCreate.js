@@ -1,13 +1,31 @@
 import { observer } from "mobx-react-lite";
 import { useRootStore } from "../../store";
 import "./style.css";
+import {useState} from "react";
+import {Colors} from "../../components/Colors";
 
 export const ModalTagsCreate = observer(({ active, onClose, onOK }) => {
-  const { taskStore, notification } = useRootStore();
+  const { tagsStore } = useRootStore();
+  const [colorHex, setColorHex] = useState('#FF6900' );
+
+  const [form, setForm] = useState({color: '#FF6900', text: ''});
+
+  const onChangeColor = (color) => {
+    setForm({...form, color: color.hex });
+  };
+
+
+  const onSaveTage = ()=>{
+    if(form.text){
+      tagsStore.create(form)
+      tagsStore.setActiveCreate()
+    }
+
+  }
 
   return (
     <div
-      className={`modal ${active ? "active" : ""}`}
+      className={`modal fade ${active ? "show" : ""}`}
       id="tagsEditModal"
       tabIndex="-1"
       aria-labelledby="exampleModalLabel"
@@ -38,6 +56,15 @@ export const ModalTagsCreate = observer(({ active, onClose, onOK }) => {
                   type="text"
                   className="form-control"
                   id="recipient-tag"
+                  value={form.text}
+                  onChange={(e)=> setForm({...form, text: e.target.value })}
+                />
+                <label htmlFor="recipient-tag" className="col-form-label">
+                  Цвет:
+                </label>
+                <Colors
+                    color={ form.color }
+                    onChangeComplete={onChangeColor}
                 />
               </div>
             </form>
@@ -51,7 +78,7 @@ export const ModalTagsCreate = observer(({ active, onClose, onOK }) => {
             >
               Закрыть
             </button>
-            <button onClick={onOK} type="button" className="btn btn-primary">
+            <button onClick={onSaveTage} type="button" className="btn btn-primary">
               Сохранить
             </button>
           </div>

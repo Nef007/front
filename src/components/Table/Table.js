@@ -21,6 +21,8 @@ export const TableCustom = ({
     onChange: onSelectChange,
   };
 
+  console.log(data)
+
   return (
     <Table
       loading={loading}
