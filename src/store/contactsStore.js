@@ -6,6 +6,8 @@ import { notification } from "./notificationStore";
 export const contactsStore = makeAutoObservable({
   contacts: [],
   loading: false,
+  activeModalCreate: false,
+  activeModalEdit: false,
 
   async getAll(form) {
     try {
@@ -42,7 +44,18 @@ export const contactsStore = makeAutoObservable({
     }
   },
 
+  onEditContact(id) {
+    this.setActiveModalEdit();
+  },
+
   setLoading() {
     this.loading = !this.loading;
+  },
+  setActiveModalCreate() {
+    this.activeModalCreate = !this.activeModalCreate;
+  },
+
+  setActiveModalEdit() {
+    this.activeModalEdit = !this.activeModalEdit;
   },
 });

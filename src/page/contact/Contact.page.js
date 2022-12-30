@@ -7,6 +7,7 @@ import { TableContact } from "../../components/TableContact.js";
 import { TableCustom } from "../../components/Table/Table";
 import { useToggle } from "react-use";
 import { useEffect, useState } from "react";
+import { ModalContact } from "./ModalContact";
 
 export const ContactPage = observer(() => {
   const { contactsStore } = useRootStore();
@@ -14,6 +15,7 @@ export const ContactPage = observer(() => {
   const [activeCreate, setActiveCreate] = useToggle(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [file, setFile] = useState();
+  const [form, setform] = useState();
 
   useEffect(() => {
     contactsStore.getAll();
@@ -42,9 +44,10 @@ export const ContactPage = observer(() => {
   const columns = [
     {
       title: "Действие",
-      render: () => (
+      render: (record) => (
         <>
           <a
+            onClick={() => contactsStore.onEditContact(record.id)}
             className="btn btn-primary"
             data-bs-toggle="modal"
             data-bs-target="#contactsEditModal"
@@ -64,7 +67,7 @@ export const ContactPage = observer(() => {
     },
     {
       title: "Имя",
-      dataIndex: "lastname",
+      dataIndex: "firstname",
     },
     {
       title: "Почта",
@@ -182,6 +185,7 @@ export const ContactPage = observer(() => {
                       <em className="fa fa-trash"></em>
                     </button>{" "}
                     <button
+                      onClick={() => contactsStore.setActiveModalCreate()}
                       type="button"
                       className="btn btn-sm btn-primary btn-create"
                     >
@@ -189,7 +193,6 @@ export const ContactPage = observer(() => {
                     </button>
                   </div>
                 </PanelHeading>
-
                 <TableCustom
                   columns={columns}
                   loading={contactsStore.loading}
@@ -202,6 +205,14 @@ export const ContactPage = observer(() => {
           </div>
         </div>
       </div>
+      <ModalContact
+        active={contactsStore.activeModalCreate}
+        onClose={() => contactsStore.setActiveModalCreate()}
+      />
+      <ModalContact
+        active={contactsStore.activeModalEdit}
+        onClose={() => contactsStore.setActiveModalEdit()}
+      />
     </main>
   );
 });

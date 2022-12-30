@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { useRootStore } from "../../store";
-import "./style.css";
 
 export const ModalTagsEdit = observer(({ active, onClose, onOK }) => {
   const { taskStore, notification } = useRootStore();

@@ -320,6 +320,10 @@ button:focus,
     transform: rotate(180deg);
 }
 
+.show{
+    display: block;
+}
+
 
 
 
