@@ -9,9 +9,12 @@ export const contactsStore = makeAutoObservable({
 
   async getAll(form) {
     try {
+      this.setLoading();
       const data = await contactAPI.getAll(form);
       this.contacts = data.data;
+      this.setLoading();
     } catch (e) {
+      this.setLoading();
       notification.setInfo("error", e.message);
     }
   },
