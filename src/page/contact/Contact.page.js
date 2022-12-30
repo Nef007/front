@@ -42,6 +42,20 @@ export const ContactPage = observer(() => {
   const columns = [
     {
       title: "Действие",
+      render: () => (
+        <>
+          <a
+            className="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#contactsEditModal"
+          >
+            <em className="fa fa-pencil"></em>
+          </a>{" "}
+          <a className="btn btn-danger">
+            <em className="fa fa-trash"></em>
+          </a>
+        </>
+      ),
     },
     {
       title: "ID",
@@ -50,7 +64,7 @@ export const ContactPage = observer(() => {
     },
     {
       title: "Имя",
-      dataIndex: "name",
+      dataIndex: "lastname",
     },
     {
       title: "Почта",
@@ -179,7 +193,7 @@ export const ContactPage = observer(() => {
                 <TableCustom
                   columns={columns}
                   loading={contactsStore.loading}
-                  contacts={contactsStore.contacts}
+                  data={contactsStore.contacts}
                   selectedRowKeys={selectedRowKeys}
                   setSelectedRowKeys={setSelectedRowKeys}
                 />

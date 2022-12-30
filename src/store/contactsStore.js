@@ -4,38 +4,7 @@ import download from "downloadjs";
 import { notification } from "./notificationStore";
 
 export const contactsStore = makeAutoObservable({
-  contacts: [
-    {
-      id: 1,
-      name: "Влад",
-      email: "kaidalon@yandex.ru",
-      phone: "8 950 713 27 69",
-      tags: [
-        { text: "soft", color: "#ff4545" },
-        { text: "point", color: "#ff4545" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Артем",
-      email: "kaalov@yandex.ru",
-      phone: "8 950 713 27 48",
-      tags: [
-        { text: "soft", color: "#ff4545" },
-        { text: "point", color: "#ff4545" },
-      ],
-    },
-    {
-      id: 3,
-      name: "Александр",
-      email: "kaidal@yandex.ru",
-      phone: "8 950 713 27 69",
-      tags: [
-        { text: "soft", color: "#ff4545" },
-        { text: "point", color: "#ff4545" },
-      ],
-    },
-  ],
+  contacts: [],
   loading: false,
 
   async getAll(form) {
