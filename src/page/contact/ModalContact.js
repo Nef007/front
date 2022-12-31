@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useRootStore } from "../../store";
 
-export const ModalContact = observer(({ active, onClose, onOK }) => {
+export const ModalContact = observer(({ active, onClose, onChange, onOk }) => {
   const { contactsStore } = useRootStore();
 
   return (
@@ -35,7 +35,9 @@ export const ModalContact = observer(({ active, onClose, onOK }) => {
                   Имя:
                 </label>
                 <input
+                  onChange={onChange}
                   type="text"
+                  name="firstname"
                   className="form-control"
                   id="recipient-name"
                 />
@@ -45,7 +47,9 @@ export const ModalContact = observer(({ active, onClose, onOK }) => {
                   Почта:
                 </label>
                 <input
+                  onChange={onChange}
                   type="email"
+                  name="email"
                   className="form-control"
                   id="recipient-email"
                 />
@@ -55,6 +59,8 @@ export const ModalContact = observer(({ active, onClose, onOK }) => {
                   Телефон:
                 </label>
                 <input
+                  onChange={onChange}
+                  name="phone"
                   type="tel"
                   className="form-control"
                   id="recipient-phone"
@@ -65,6 +71,7 @@ export const ModalContact = observer(({ active, onClose, onOK }) => {
                   Теги:
                 </label>
                 <input
+                  onChange={onChange}
                   className="tags"
                   name="tags-edit"
                   value='[{"value":"point"}, {"value":"soft"}]'
@@ -82,7 +89,7 @@ export const ModalContact = observer(({ active, onClose, onOK }) => {
             >
               Закрыть
             </button>
-            <button type="button" className="btn btn-primary">
+            <button onClick={onOk} type="button" className="btn btn-primary">
               Сохранить
             </button>
           </div>

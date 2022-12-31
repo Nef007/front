@@ -15,7 +15,12 @@ export const ContactPage = observer(() => {
   const [activeCreate, setActiveCreate] = useToggle(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [file, setFile] = useState();
-  const [form, setform] = useState();
+  // const [form, setForm] = useState({
+  //   firstname: "",
+  //   email: "",
+  //   phone: "",
+  //   tags: [],
+  // });
 
   useEffect(() => {
     contactsStore.getAll();
@@ -39,7 +44,10 @@ export const ContactPage = observer(() => {
     window.location.href =
       "http://2a5d-188-162-195-211.ngrok.io/contacts/export";
   };
-  // await contactsStore.downloadFile();
+
+  // const onChangeModalCreateContact = (e) => {
+  //   setForm({ ...form, [e.target.name]: e.target.value });
+  // };
 
   const columns = [
     {
@@ -208,6 +216,9 @@ export const ContactPage = observer(() => {
       <ModalContact
         active={contactsStore.activeModalCreate}
         onClose={() => contactsStore.setActiveModalCreate()}
+        onChange={(e) => contactsStore.setForm(e)}
+        form={contactsStore.formContact}
+        onOk={() => contactsStore.create()}
       />
       <ModalContact
         active={contactsStore.activeModalEdit}

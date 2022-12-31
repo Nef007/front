@@ -33,11 +33,18 @@ export const App = observer(() => {
         <Route path="/*" element={<Navigate replace to="/contacts" />} />
       </Routes>
       <ScrollButton />
-      {tagsStore.activeCreate ||
+      {(tagsStore.activeCreate ||
         contactsStore.activeModalCreate ||
-        (contactsStore.activeModalEdit && (
-          <div className={`modal-backdrop fade show`}></div>
-        ))}
+        contactsStore.activeModalEdit) && (
+        <div
+          onClick={() => {
+            tagsStore.setActiveCreate(true, false);
+            contactsStore.setActiveModalCreate(true, false);
+            contactsStore.setActiveModalEdit(true, false);
+          }}
+          className={`modal-backdrop fade show`}
+        ></div>
+      )}
       {/*<Footer />*/}
     </>
   );

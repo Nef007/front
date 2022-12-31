@@ -1,30 +1,26 @@
 import axios from "axios";
 axios.defaults.headers.common["X-CSRF-TOKEN"] = window.csrf_token;
 
+let BASE_URL = "https://4cf8-178-176-166-190.ngrok.io";
+
 export const contactAPI = {
   async create(form) {
     return await axios.post("/api/contacts", form);
   },
 
   async upload(form) {
-    return await axios.post(
-      "http://2a5d-188-162-195-211.ngrok.io/contacts/import",
-      form,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    return await axios.post(`${BASE_URL}/contacts/import`, form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
   async download() {
-    return await axios.get(
-      "http://2a5d-188-162-195-211.ngrok.io/contacts/export"
-    );
+    return await axios.get(`${BASE_URL}/contacts/export`);
   },
 
   async getAll() {
-    return await axios.get("http://2a5d-188-162-195-211.ngrok.io/api/contacts");
+    return await axios.get(`${BASE_URL}/api/contacts`);
   },
   async get() {
     return await axios.get("/api/contacts");
@@ -41,13 +37,10 @@ export const contactAPI = {
 
 export const tagAPI = {
   async create(form) {
-    return await axios.post(
-      "http://2a5d-188-162-195-211.ngrok.io/api/tags",
-      form
-    );
+    return await axios.post(`${BASE_URL}/api/tags`, form);
   },
   async getAll() {
-    return await axios.get("http://2a5d-188-162-195-211.ngrok.io/api/tags");
+    return await axios.get(`${BASE_URL}/api/tags`);
   },
   async get() {
     return await axios.get("/api/tags");
@@ -57,8 +50,6 @@ export const tagAPI = {
   },
 
   async delete(id) {
-    return await axios.delete(
-      `http://2a5d-188-162-195-211.ngrok.io/api/tags/${id}`
-    );
+    return await axios.delete(`${BASE_URL}/api/tags/${id}`);
   },
 };

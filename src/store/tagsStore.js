@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { tagAPI } from "../api";
 import { notification } from "./notificationStore";
-import {useToggle} from "react-use";
+import { useToggle } from "react-use";
 
 export const tagsStore = makeAutoObservable({
   tags: [],
@@ -10,7 +10,6 @@ export const tagsStore = makeAutoObservable({
 
   loading: false,
   activeCreate: false,
-
 
   async getAll() {
     try {
@@ -36,8 +35,7 @@ export const tagsStore = makeAutoObservable({
     try {
       this.setLoading();
       const data = await tagAPI.create(form);
-      this.tags = [...this.tags, data.data ];
-
+      this.tags = [...this.tags, data.data];
 
       this.setLoading();
     } catch (e) {
@@ -48,7 +46,7 @@ export const tagsStore = makeAutoObservable({
     try {
       this.setLoading();
       const data = await tagAPI.delete(id);
-      this.tags = this.tags.filter((item=>item.id!==id));
+      this.tags = this.tags.filter((item) => item.id !== id);
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -59,7 +57,11 @@ export const tagsStore = makeAutoObservable({
   setLoading() {
     this.loading = !this.loading;
   },
-  setActiveCreate() {
-    this.activeCreate = !this.activeCreate;
+  setActiveCreate(on, bool) {
+    if (on) {
+      this.activeCreate = bool;
+    } else {
+      this.activeCreate = !this.activeCreate;
+    }
   },
 });
