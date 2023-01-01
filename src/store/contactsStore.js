@@ -46,6 +46,19 @@ export const contactsStore = makeAutoObservable({
       notification.setInfo("error", e.message);
     }
   },
+  async delete(arrayId) {
+    try {
+      this.setLoading();
+      // await contactAPI.delete(arrayId);
+      this.contacts = this.contacts.filter(
+        (item) => !arrayId.includes(item.id)
+      );
+      this.setLoading();
+    } catch (e) {
+      this.setLoading();
+      notification.setInfo("error", e.message);
+    }
+  },
   async saveContact(form) {
     try {
       this.setLoading();

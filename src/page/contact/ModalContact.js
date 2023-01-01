@@ -4,8 +4,7 @@ import { SelectCustom } from "../../components/CustomSelect/SelectCustom";
 import { useEffect, useState } from "react";
 
 export const ModalContact = observer(({ active, onClose }) => {
-  const { contactsStore, tagsStore } = useRootStore();
-  console.log(contactsStore.contactActive);
+  const { contactsStore } = useRootStore();
   const [form, setForm] = useState(contactsStore.contactActive);
 
   useEffect(() => {

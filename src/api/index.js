@@ -31,7 +31,7 @@ export const contactAPI = {
   },
 
   async delete(id) {
-    return await axios.delete("/api/contacts");
+    return await axios.delete(`${BASE_URL}/api/contacts`);
   },
   async addTags(form) {
     return await axios.post(`${BASE_URL}/contacts/export`, form);

@@ -14,6 +14,11 @@ export const tagsStore = makeAutoObservable({
 
   loading: false,
   activeCreate: false,
+  activeEdit: false,
+  tagActive: {
+    text: "",
+    color: "",
+  },
 
   async getAll() {
     try {
@@ -46,11 +51,11 @@ export const tagsStore = makeAutoObservable({
       notification.setInfo("error", e.message);
     }
   },
-  async delete(id) {
+  async delete(arrayId) {
     try {
       this.setLoading();
-      const data = await tagAPI.delete(id);
-      this.tags = this.tags.filter((item) => item.id !== id);
+      // const data = await tagAPI.delete(id);
+      this.tags = this.tags.filter((item) => !arrayId.includes(item.id));
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -58,14 +63,26 @@ export const tagsStore = makeAutoObservable({
     }
   },
 
+  resetTagActive() {
+    this.tagActive = {
+      text: "",
+      color: "#FF6900",
+    };
+  },
+
   setLoading() {
     this.loading = !this.loading;
   },
-  setActiveCreate(on, bool) {
-    if (on) {
-      this.activeCreate = bool;
-    } else {
-      this.activeCreate = !this.activeCreate;
+  setActiveCreate() {
+    this.activeCreate = !this.activeCreate;
+    if (this.activeCreate) {
+      this.resetTagActive();
+    }
+  },
+  setActiveEdit() {
+    this.activeEdit = !this.activeEdit;
+    if (this.activeCreate) {
+      this.resetTagActive();
     }
   },
 });

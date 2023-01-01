@@ -1,27 +1,27 @@
 import { observer } from "mobx-react-lite";
 import { useRootStore } from "../../store";
 import "./style.css";
-import {useState} from "react";
-import {Colors} from "../../components/Colors";
+import { useEffect, useState } from "react";
+import { Colors } from "../../components/Colors";
 
-export const ModalTagsCreate = observer(({ active, onClose, onOK }) => {
+export const ModalTags = observer(({ active, onClose }) => {
   const { tagsStore } = useRootStore();
-  const [colorHex, setColorHex] = useState('#FF6900' );
 
-  const [form, setForm] = useState({color: '#FF6900', text: ''});
+  const [form, setForm] = useState(tagsStore.tagActive);
+  useEffect(() => {
+    setForm(tagsStore.tagActive);
+  }, [tagsStore.tagActive]);
 
   const onChangeColor = (color) => {
-    setForm({...form, color: color.hex });
+    setForm({ ...form, color: color.hex });
   };
 
-
-  const onSaveTage = ()=>{
-    if(form.text){
-      tagsStore.create(form)
-      tagsStore.setActiveCreate()
+  const onSaveTage = () => {
+    if (form.text) {
+      tagsStore.create(form);
+      tagsStore.setActiveCreate();
     }
-
-  }
+  };
 
   return (
     <div
@@ -35,7 +35,7 @@ export const ModalTagsCreate = observer(({ active, onClose, onOK }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h1 className="modal-title fs-5" id="exampleModalLabel">
-              Создание тега
+              {tagsStore.activeCreate ? "Создание тега" : "Редактирование тега"}
             </h1>
             <button
               onClick={onClose}
@@ -57,15 +57,12 @@ export const ModalTagsCreate = observer(({ active, onClose, onOK }) => {
                   className="form-control"
                   id="recipient-tag"
                   value={form.text}
-                  onChange={(e)=> setForm({...form, text: e.target.value })}
+                  onChange={(e) => setForm({ ...form, text: e.target.value })}
                 />
                 <label htmlFor="recipient-tag" className="col-form-label">
                   Цвет:
                 </label>
-                <Colors
-                    color={ form.color }
-                    onChangeComplete={onChangeColor}
-                />
+                <Colors color={form.color} onChangeComplete={onChangeColor} />
               </div>
             </form>
           </div>
@@ -78,7 +75,11 @@ export const ModalTagsCreate = observer(({ active, onClose, onOK }) => {
             >
               Закрыть
             </button>
-            <button onClick={onSaveTage} type="button" className="btn btn-primary">
+            <button
+              onClick={onSaveTage}
+              type="button"
+              className="btn btn-primary"
+            >
               Сохранить
             </button>
           </div>

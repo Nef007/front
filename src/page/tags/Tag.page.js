@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 import { useToggle } from "react-use";
 import { message } from "antd";
 import { TableCustom } from "../../components/Table/Table";
-import { ModalTagsCreate } from "./ModalTagsCreate";
+import { ModalTags } from "./ModalTags";
 
 export const TagPage = observer(() => {
   const { tagsStore } = useRootStore();
- // const [activeCreate, setActiveCreate] = useToggle(false);
+  // const [activeCreate, setActiveCreate] = useToggle(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
@@ -39,7 +39,10 @@ export const TagPage = observer(() => {
           >
             <em className="fa fa-pencil"></em>
           </a>{" "}
-          <a onClick={()=>tagsStore.delete(record.id)} className="btn btn-danger">
+          <a
+            onClick={() => tagsStore.delete([record.id])}
+            className="btn btn-danger"
+          >
             <em className="fa fa-trash"></em>
           </a>
         </>
@@ -116,11 +119,16 @@ export const TagPage = observer(() => {
                       >
                         Выбрать все
                       </button>{" "}
-                      <button className="btn btn-sm btn-danger disabled">
+                      <button
+                        onClick={() => tagsStore.delete(selectedRowKeys)}
+                        className={`btn btn-sm btn-danger ${
+                          selectedRowKeys.length ? "" : "disabled"
+                        } `}
+                      >
                         <em className="fa fa-trash"></em>
                       </button>{" "}
                       <button
-                        onClick={()=>tagsStore.setActiveCreate()}
+                        onClick={() => tagsStore.setActiveCreate()}
                         type="button"
                         className="btn btn-sm btn-primary btn-create"
                       >
@@ -142,7 +150,14 @@ export const TagPage = observer(() => {
           </div>
         </div>
       </div>
-      <ModalTagsCreate active={tagsStore.activeCreate} onClose={()=>tagsStore.setActiveCreate()} />
+      <ModalTags
+        active={tagsStore.activeCreate}
+        onClose={() => tagsStore.setActiveCreate()}
+      />
+      <ModalTags
+        active={tagsStore.activeEdit}
+        onClose={() => tagsStore.setActiveEdit()}
+      />
     </main>
   );
 });

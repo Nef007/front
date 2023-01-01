@@ -59,7 +59,10 @@ export const ContactPage = observer(() => {
           >
             <em className="fa fa-pencil"></em>
           </a>{" "}
-          <a className="btn btn-danger">
+          <a
+            onClick={() => contactsStore.delete([record.id])}
+            className="btn btn-danger"
+          >
             <em className="fa fa-trash"></em>
           </a>
         </>
@@ -205,7 +208,12 @@ export const ContactPage = observer(() => {
                     >
                       <em className="fa fa-pencil"></em>
                     </button>{" "}
-                    <button className="btn btn-sm btn-danger disabled">
+                    <button
+                      onClick={() => contactsStore.delete(selectedRowKeys)}
+                      className={`btn btn-sm btn-danger ${
+                        selectedRowKeys.length ? "" : "disabled"
+                      } `}
+                    >
                       <em className="fa fa-trash"></em>
                     </button>{" "}
                     <button
