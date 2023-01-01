@@ -4,7 +4,11 @@ import { notification } from "./notificationStore";
 import { useToggle } from "react-use";
 
 export const tagsStore = makeAutoObservable({
-  tags: [],
+  tags: [
+    { id: 1, text: "dev", color: "#436543" },
+    { id: 2, text: "fd", color: "#433243" },
+    { id: 3, text: "soft", color: "#434343" },
+  ],
 
   tag: {},
 

@@ -1,6 +1,7 @@
 import "./assets/css/normalize.css";
 import "./assets/css/bootstrap.min.css";
 import "./assets/css/main.css";
+import "antd/dist/antd.min.css";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { useRootStore } from "./store";
@@ -33,19 +34,6 @@ export const App = observer(() => {
         <Route path="/*" element={<Navigate replace to="/contacts" />} />
       </Routes>
       <ScrollButton />
-      {(tagsStore.activeCreate ||
-        contactsStore.activeModalCreate ||
-        contactsStore.activeModalEdit) && (
-        <div
-          onClick={() => {
-            tagsStore.setActiveCreate(true, false);
-            contactsStore.setActiveModalCreate(true, false);
-            contactsStore.setActiveModalEdit(true, false);
-          }}
-          className={`modal-backdrop fade show`}
-        ></div>
-      )}
-      {/*<Footer />*/}
     </>
   );
 });

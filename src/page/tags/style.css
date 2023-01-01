@@ -1,6 +1,13 @@
 .show{
     display: block;
+    opacity: 1 !important;
 }
+.modal-backdrop {
+    background-color: rgba(0,0,0,0.5) !important;
+}
+/*.modal-backdrop.fade {*/
+/*    opacity: 1 !important;*/
+/*}*/
 /*.modal{*/
 /*    font-size: 16px;*/
 /*    line-height: 24px;*/

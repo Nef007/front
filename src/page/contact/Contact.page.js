@@ -3,28 +3,21 @@ import { useRootStore } from "../../store";
 import { Title } from "../../components/Title";
 import { PanelHeading } from "../../layout/panel-heading";
 import { ButtonSecondary } from "../../components/ButtonSecondary";
-import { TableContact } from "../../components/TableContact.js";
 import { TableCustom } from "../../components/Table/Table";
-import { useToggle } from "react-use";
 import { useEffect, useState } from "react";
 import { ModalContact } from "./ModalContact";
+import { SelectCustom } from "../../components/CustomSelect/SelectCustom";
 
 export const ContactPage = observer(() => {
   const { contactsStore } = useRootStore();
 
-  const [activeCreate, setActiveCreate] = useToggle(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [file, setFile] = useState();
-  // const [form, setForm] = useState({
-  //   firstname: "",
-  //   email: "",
-  //   phone: "",
-  //   tags: [],
-  // });
 
   useEffect(() => {
     contactsStore.getAll();
   }, []);
+  useEffect(() => {}, [contactsStore.idLoadingSelect]);
 
   const onSelectAllRows = () => {
     setSelectedRowKeys(contactsStore.contacts.map((item) => item.id));
@@ -45,9 +38,13 @@ export const ContactPage = observer(() => {
       "http://2a5d-188-162-195-211.ngrok.io/contacts/export";
   };
 
-  // const onChangeModalCreateContact = (e) => {
-  //   setForm({ ...form, [e.target.name]: e.target.value });
-  // };
+  const onChangeSelect = async (value, id) => {
+    console.log(value);
+    // let form = contactsStore.contacts.filter(item=>item.id===id)[0]
+    // await contactsStore.saveContact({...form, })
+  };
+
+  // console.log(2222222, contactsStore.idLoadingSelect);
 
   const columns = [
     {
@@ -87,11 +84,29 @@ export const ContactPage = observer(() => {
     },
     {
       title: "Теги",
-      render: (record) => {
-        return record.tags.map((item) => {
-          return <span>{item.text}</span>;
-        });
-      },
+      render: (record) => (
+        <SelectCustom
+          defaultValue={record.tags.map((item) => ({
+            value: item.id,
+            label: item.text,
+          }))}
+          loading={record.id === contactsStore.idLoadingSelect}
+          onSelect={(value) =>
+            contactsStore.addTags({
+              id: value.value,
+              text: value.label,
+              contactId: record.id,
+            })
+          }
+          onDeselect={(value) =>
+            contactsStore.deleteTags({
+              id: value.value,
+              text: value.label,
+              contactId: record.id,
+            })
+          }
+        />
+      ),
     },
   ];
   return (
@@ -177,6 +192,7 @@ export const ContactPage = observer(() => {
                   </div>
                   <div className="col col-sm-6 text-end col-12 gy-2">
                     <button
+                      onClick={onSelectAllRows}
                       type="button"
                       className="btn btn-sm btn-primary btn-create"
                     >
@@ -216,9 +232,6 @@ export const ContactPage = observer(() => {
       <ModalContact
         active={contactsStore.activeModalCreate}
         onClose={() => contactsStore.setActiveModalCreate()}
-        onChange={(e) => contactsStore.setForm(e)}
-        form={contactsStore.formContact}
-        onOk={() => contactsStore.create()}
       />
       <ModalContact
         active={contactsStore.activeModalEdit}

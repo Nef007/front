@@ -1,7 +1,7 @@
 import axios from "axios";
 axios.defaults.headers.common["X-CSRF-TOKEN"] = window.csrf_token;
 
-let BASE_URL = "https://4cf8-178-176-166-190.ngrok.io";
+let BASE_URL = "";
 
 export const contactAPI = {
   async create(form) {
@@ -32,6 +32,12 @@ export const contactAPI = {
 
   async delete(id) {
     return await axios.delete("/api/contacts");
+  },
+  async addTags(form) {
+    return await axios.post(`${BASE_URL}/contacts/export`, form);
+  },
+  async deleteTags(form) {
+    return await axios.delete(`${BASE_URL}/contacts/export`, { data: form });
   },
 };
 
