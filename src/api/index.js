@@ -1,11 +1,11 @@
 import axios from "axios";
 axios.defaults.headers.common["X-CSRF-TOKEN"] = window.csrf_token;
 
-let BASE_URL = "";
+export let BASE_URL = "http://ruzalgc8.beget.tech/laravel/public/index.php";
 
 export const contactAPI = {
   async create(form) {
-    return await axios.post("/api/contacts", form);
+    return await axios.post(`${BASE_URL}/api/contacts`, form);
   },
 
   async upload(form) {
@@ -19,15 +19,12 @@ export const contactAPI = {
     return await axios.get(`${BASE_URL}/contacts/export`);
   },
 
-  async getAll() {
-    return await axios.get(`${BASE_URL}/api/contacts`);
-  },
   async get() {
-    return await axios.get("/api/contacts");
+    return await axios.get(`${BASE_URL}/api/contacts`);
   },
 
   async update(form) {
-    return await axios.put("/api/contacts", form);
+    return await axios.put(`${BASE_URL}/api/contacts`, form);
   },
 
   async delete(id) {
@@ -36,7 +33,7 @@ export const contactAPI = {
   async addTags(form) {
     return await axios.post(`${BASE_URL}/contacts/export`, form);
   },
-  async deleteTags(form) {
+  async removeTags(form) {
     return await axios.delete(`${BASE_URL}/contacts/export`, { data: form });
   },
 };
@@ -45,17 +42,17 @@ export const tagAPI = {
   async create(form) {
     return await axios.post(`${BASE_URL}/api/tags`, form);
   },
-  async getAll() {
+  async get() {
     return await axios.get(`${BASE_URL}/api/tags`);
   },
-  async get() {
-    return await axios.get("/api/tags");
-  },
+  // async get() {
+  //   return await axios.get("/api/tags");
+  // },
   async update(form) {
-    return await axios.put("/api/tags", form);
+    return await axios.put(`${BASE_URL}/api/tags/${form.id}`, form);
   },
 
-  async delete(id) {
-    return await axios.delete(`${BASE_URL}/api/tags/${id}`);
+  async delete(arrayId) {
+    return await axios.delete(`${BASE_URL}/api/tags/`, { data: arrayId });
   },
 };

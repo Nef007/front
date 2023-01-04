@@ -2,25 +2,65 @@ import { observer } from "mobx-react-lite";
 import { useRootStore } from "../../store";
 import { Title } from "../../components/Title";
 import { PanelHeading } from "../../layout/panel-heading";
-import { ButtonSecondary } from "../../components/ButtonSecondary";
+
 import { TableCustom } from "../../components/Table/Table";
 import { useEffect, useState } from "react";
 import { ModalContact } from "./ModalContact";
 import { SelectCustom } from "../../components/CustomSelect/SelectCustom";
+import { useToggle } from "react-use";
+import Tagify from "../../components/CustomSelect/Tagify";
+import { Button } from "react-bootstrap";
+import { ModalTagsEdit } from "./ModalTagsEdit";
+import { BASE_URL } from "../../api";
+const phoneNumberFormatter = require("phone-number-formats");
 
 export const ContactPage = observer(() => {
-  const { contactsStore } = useRootStore();
+  const { contactsStore, tagsStore } = useRootStore();
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [valueSearch, setValueSearch] = useState("");
   const [file, setFile] = useState();
+  const [activeModalEdit, setActiveModalEdit] = useToggle(false);
+  const [activeTagsEdit, setActiveTagsEdit] = useToggle(false);
+  const [activeModalCreate, setActiveModalCreate] = useToggle(false);
+  const [form, setForm] = useState({
+    firstname: "",
+    email: "",
+    phone: "",
+    tags: [],
+  });
+  const [tagsForm, setTagsForm] = useState({
+    contacts: [],
+    tags: [],
+  });
+  const [alert, setAlert] = useState("");
 
   useEffect(() => {
-    contactsStore.getAll();
+    contactsStore.get();
   }, []);
   useEffect(() => {}, [contactsStore.idLoadingSelect]);
 
   const onSelectAllRows = () => {
     setSelectedRowKeys(contactsStore.contacts.map((item) => item.id));
+  };
+
+  const onEdit = (record) => {
+    setForm(record);
+    setActiveModalEdit();
+  };
+  const onCreate = () => {
+    setForm({
+      firstname: "",
+      email: "",
+      phone: "",
+      tags: [],
+    });
+    setActiveModalCreate();
+  };
+
+  const setRowKey = (data) => {
+    setTagsForm({ ...tagsForm, contacts: data });
+    setSelectedRowKeys(data);
   };
 
   const onChangeInput = (e) => {
@@ -34,17 +74,36 @@ export const ContactPage = observer(() => {
   };
   const onDownloadFile = async (e) => {
     e.preventDefault();
-    window.location.href =
-      "http://2a5d-188-162-195-211.ngrok.io/contacts/export";
+    window.location.href = `${BASE_URL}/contacts/export`;
   };
 
-  const onChangeSelect = async (value, id) => {
-    console.log(value);
-    // let form = contactsStore.contacts.filter(item=>item.id===id)[0]
-    // await contactsStore.saveContact({...form, })
+  const onSaveContact = async (e) => {
+    e.preventDefault();
+    await contactsStore.saveContact(form);
+    setActiveModalCreate();
+  };
+  const onSaveTags = async (e) => {
+    e.preventDefault();
+    if (!tagsForm.contacts.length) {
+      return setAlert("Выберите контакты");
+    }
+    if (!tagsForm.tags.length) {
+      return setAlert("Введите теги");
+    }
+    console.log({ ...tagsForm, contacts: selectedRowKeys });
+    // await contactsStore.saveTags({ ...tagsForm, contacts: selectedRowKeys });
+    setActiveTagsEdit();
   };
 
-  // console.log(2222222, contactsStore.idLoadingSelect);
+  const onSearch = (e) => {
+    e.preventDefault();
+    console.log("value", valueSearch);
+    contactsStore.onSearch(valueSearch);
+  };
+  const onDeleteContact = () => {
+    contactsStore.delete(selectedRowKeys);
+    setSelectedRowKeys([]);
+  };
 
   const columns = [
     {
@@ -52,7 +111,7 @@ export const ContactPage = observer(() => {
       render: (record) => (
         <>
           <a
-            onClick={() => contactsStore.onEditContact(record.id)}
+            onClick={() => onEdit(record)}
             className="btn btn-primary"
             data-bs-toggle="modal"
             data-bs-target="#contactsEditModal"
@@ -72,10 +131,12 @@ export const ContactPage = observer(() => {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      sorter: (a, b) => a.id - b.id,
     },
     {
       title: "Имя",
       dataIndex: "firstname",
+      sorter: (a, b) => a.firstname.localeCompare(b.firstname),
     },
     {
       title: "Почта",
@@ -84,34 +145,37 @@ export const ContactPage = observer(() => {
     {
       title: "Телефон",
       dataIndex: "phone",
+      render: (text) =>
+        text &&
+        new phoneNumberFormatter(text).format({
+          type: "international",
+          separator: " ",
+        }).string,
     },
     {
       title: "Теги",
+      filters: tagsStore.tags.map((item) => ({
+        text: item.text,
+        value: item.text,
+      })),
+      // filteredValue: filteredInfo.address || null,
+      onFilter: (value, record) =>
+        record.tags.some((item) => item.text.includes(value)),
       render: (record) => (
-        <SelectCustom
-          defaultValue={record.tags.map((item) => ({
-            value: item.id,
-            label: item.text,
-          }))}
-          loading={record.id === contactsStore.idLoadingSelect}
-          onSelect={(value) =>
-            contactsStore.addTags({
-              id: value.value,
-              text: value.label,
-              contactId: record.id,
-            })
+        <Tagify
+          defaultValue={record.tags}
+          loading={contactsStore.idLoadingSelect === record.id}
+          onAdd={(value) =>
+            contactsStore.addTags({ contactId: record.id, id: value.id })
           }
-          onDeselect={(value) =>
-            contactsStore.deleteTags({
-              id: value.value,
-              text: value.label,
-              contactId: record.id,
-            })
+          onRemove={(value) =>
+            contactsStore.removeTags({ contactId: record.id, id: value.id })
           }
         />
       ),
     },
   ];
+
   return (
     <main className="main-content">
       <div className="container">
@@ -122,13 +186,18 @@ export const ContactPage = observer(() => {
               <div className="panel panel-default panel-table">
                 <PanelHeading>
                   <div className="col col-sm-6 col-12 text-sm-center gy-2">
-                    <form action="src/page/contact/Contact.page#">
+                    <form>
                       <div className="mb-3">
                         <div className="input-group input-group-sm">
-                          <ButtonSecondary onClick={onUploadFile}>
+                          <Button
+                            variant="btn btn-outline-secondary"
+                            onClick={onUploadFile}
+                            type="submit"
+                          >
                             Загрузить
-                          </ButtonSecondary>
+                          </Button>
                           <input
+                            required
                             onChange={(e) => onChangeInput(e)}
                             type="file"
                             className="form-control"
@@ -136,60 +205,32 @@ export const ContactPage = observer(() => {
                             aria-describedby="inputGroupFileAddon04"
                             aria-label="Upload"
                           />
-                          <ButtonSecondary onClick={onDownloadFile}>
+                          <Button
+                            variant="btn btn-outline-secondary"
+                            onClick={onDownloadFile}
+                          >
                             Выгрузить
-                          </ButtonSecondary>
+                          </Button>
+                          {/*</form>*/}
                         </div>
                       </div>
-
+                    </form>
+                    <form>
                       <div className="input-group input-group-sm">
                         <input
+                          value={valueSearch}
+                          onChange={(e) => setValueSearch(e.target.value)}
                           type="text"
                           className="form-control"
                           aria-label="Text input with segmented dropdown button"
                         />
                         <button
-                          type="button"
+                          onClick={onSearch}
+                          type="submit"
                           className="btn btn-outline-secondary"
                         >
                           Поиск
                         </button>
-                        <button
-                          type="button"
-                          className="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          <span className="visually-hidden">
-                            Toggle Dropdown
-                          </span>
-                        </button>
-                        <ul className="dropdown-menu dropdown-menu-end">
-                          <li>
-                            <a
-                              className="dropdown-item"
-                              href="src/page/contact/Contact.page#"
-                            >
-                              Фильтр 1
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              className="dropdown-item"
-                              href="src/page/contact/Contact.page#"
-                            >
-                              Фильтр 2
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              className="dropdown-item"
-                              href="src/page/contact/Contact.page#"
-                            >
-                              Фильтр 3
-                            </a>
-                          </li>
-                        </ul>
                       </div>
                     </form>
                   </div>
@@ -202,6 +243,7 @@ export const ContactPage = observer(() => {
                       Выбрать все
                     </button>{" "}
                     <button
+                      onClick={setActiveTagsEdit}
                       className="btn btn-sm btn-primary"
                       data-bs-toggle="modal"
                       data-bs-target="#multipleTagsEditModal"
@@ -209,7 +251,7 @@ export const ContactPage = observer(() => {
                       <em className="fa fa-pencil"></em>
                     </button>{" "}
                     <button
-                      onClick={() => contactsStore.delete(selectedRowKeys)}
+                      onClick={onDeleteContact}
                       className={`btn btn-sm btn-danger ${
                         selectedRowKeys.length ? "" : "disabled"
                       } `}
@@ -217,7 +259,7 @@ export const ContactPage = observer(() => {
                       <em className="fa fa-trash"></em>
                     </button>{" "}
                     <button
-                      onClick={() => contactsStore.setActiveModalCreate()}
+                      onClick={onCreate}
                       type="button"
                       className="btn btn-sm btn-primary btn-create"
                     >
@@ -228,9 +270,9 @@ export const ContactPage = observer(() => {
                 <TableCustom
                   columns={columns}
                   loading={contactsStore.loading}
-                  data={contactsStore.contacts}
+                  data={contactsStore.filtered}
                   selectedRowKeys={selectedRowKeys}
-                  setSelectedRowKeys={setSelectedRowKeys}
+                  setSelectedRowKeys={setRowKey}
                 />
               </div>
             </div>
@@ -238,12 +280,30 @@ export const ContactPage = observer(() => {
         </div>
       </div>
       <ModalContact
-        active={contactsStore.activeModalCreate}
-        onClose={() => contactsStore.setActiveModalCreate()}
+        active={activeModalCreate}
+        onClose={setActiveModalCreate}
+        form={form}
+        setForm={setForm}
+        onSubmit={onSaveContact}
+        title="Создание контакта"
       />
       <ModalContact
-        active={contactsStore.activeModalEdit}
-        onClose={() => contactsStore.setActiveModalEdit()}
+        active={activeModalEdit}
+        onClose={setActiveModalEdit}
+        form={form}
+        setForm={setForm}
+        onSubmit={onSaveContact}
+        title="Редактирование контакта"
+      />
+      <ModalTagsEdit
+        active={activeTagsEdit}
+        onClose={setActiveTagsEdit}
+        form={tagsForm}
+        setForm={setTagsForm}
+        onSubmit={onSaveTags}
+        title="Массовое добавление тегов"
+        alertText={alert}
+        setAlert={setAlert}
       />
     </main>
   );

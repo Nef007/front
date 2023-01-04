@@ -20,6 +20,7 @@ export const TableCustom = ({
 
   return (
     <Table
+      scroll={{ x: 990 }}
       loading={loading}
       bordered
       rowSelection={rowSelection}

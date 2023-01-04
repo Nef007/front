@@ -2,44 +2,29 @@ import { makeAutoObservable } from "mobx";
 import { contactAPI } from "../api";
 import download from "downloadjs";
 import { notification } from "./notificationStore";
-import { useLogger } from "react-use";
 
 export const contactsStore = makeAutoObservable({
-  contacts: [
-    {
-      id: 1,
-      firstname: "Влад",
-      email: "kaydalov",
-      phone: "895043545",
-      tags: [{ id: 3, text: "soft", color: "#434343" }],
-    },
-    {
-      id: 2,
-      firstname: "Александр",
-      email: "kaydalov",
-      phone: "89507345",
-      tags: [
-        { id: 3, text: "dev", color: "#436543" },
-        { id: 2, text: "fd", color: "#436543" },
-      ],
-    },
-  ],
+  contacts: [],
   loading: false,
   idLoadingSelect: "",
-  activeModalCreate: false,
-  activeModalEdit: false,
-  contactActive: {
+  filtered: [],
+  form: {
     firstname: "",
     email: "",
     phone: "",
     tags: [],
   },
 
-  async getAll(form) {
+  setForm(obj) {
+    this.form = obj;
+  },
+
+  async get(form) {
     try {
       this.setLoading();
-      const data = await contactAPI.getAll(form);
+      const data = await contactAPI.get(form);
       this.contacts = data.data;
+      this.filtered = this.contacts;
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -53,6 +38,7 @@ export const contactsStore = makeAutoObservable({
       this.contacts = this.contacts.filter(
         (item) => !arrayId.includes(item.id)
       );
+      this.filtered = this.contacts;
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -74,6 +60,7 @@ export const contactsStore = makeAutoObservable({
         const data = await contactAPI.create(form);
         this.contacts = [...this.contacts, data.data];
       }
+      this.filtered = this.contacts;
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -88,6 +75,7 @@ export const contactsStore = makeAutoObservable({
       formData.append("files", file);
       const data = await contactAPI.upload(formData);
       // this.contacts = data.data;
+      // this.filtered = this.contacts;
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -99,6 +87,7 @@ export const contactsStore = makeAutoObservable({
       const data = await contactAPI.download();
       download(data.data, "output.xlsx", "text/plain");
       // this.contacts = data.data;
+      // this.filtered = this.contacts;
     } catch (e) {
       notification.setInfo("error", e.message);
     }
@@ -114,6 +103,7 @@ export const contactsStore = makeAutoObservable({
         }
         return item;
       });
+      this.filtered = this.contacts;
       this.setLoadingSelect("");
     } catch (e) {
       this.setLoadingSelect("");
@@ -121,7 +111,7 @@ export const contactsStore = makeAutoObservable({
     }
   },
 
-  async deleteTags(form) {
+  async removeTags(form) {
     try {
       this.setLoadingSelect(form.contactId);
 
@@ -131,13 +121,14 @@ export const contactsStore = makeAutoObservable({
         });
 
       await getData();
-      // await contactAPI.deleteTags(form);
+      // await contactAPI.removeTags(form);
       this.contacts = this.contacts.map((item) => {
         if (item.id === form.contactId) {
           item.tags = item.tags.filter((item) => item.id !== form.id);
         }
         return item;
       });
+      this.filtered = this.contacts;
       this.setLoadingSelect("");
     } catch (e) {
       this.setLoadingSelect("");
@@ -145,9 +136,28 @@ export const contactsStore = makeAutoObservable({
     }
   },
 
-  onEditContact(id) {
-    this.contactActive = this.contacts.filter((item) => item.id === id)[0];
-    this.setActiveModalEdit();
+  onSearch(value) {
+    this.filtered = this.contacts.filter((item) => {
+      let bool = false;
+      if (!value) bool = true;
+
+      for (let i in item) {
+        if (
+          value &&
+          String(item[i]).toLowerCase().includes(value.toLowerCase())
+        ) {
+          bool = true;
+        }
+
+        for (let text in item.tags) {
+          if (value && text.toLowerCase().includes(value.toLowerCase())) {
+            bool = true;
+          }
+        }
+      }
+
+      return bool;
+    });
   },
 
   setLoading() {
@@ -155,26 +165,5 @@ export const contactsStore = makeAutoObservable({
   },
   setLoadingSelect(value) {
     this.idLoadingSelect = value;
-  },
-
-  resetcontactActive() {
-    this.contactActive = {
-      firstname: "",
-      email: "",
-      phone: "",
-      tags: [],
-    };
-  },
-  setActiveModalCreate() {
-    this.activeModalCreate = !this.activeModalCreate;
-    if (this.activeModalCreate) {
-      this.resetcontactActive();
-    }
-  },
-  setActiveModalEdit() {
-    this.activeModalEdit = !this.activeModalEdit;
-    if (this.activeModalCreate) {
-      this.resetcontactActive();
-    }
   },
 });

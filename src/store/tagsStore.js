@@ -1,51 +1,51 @@
 import { makeAutoObservable } from "mobx";
-import { tagAPI } from "../api";
+import { contactAPI, tagAPI } from "../api";
 import { notification } from "./notificationStore";
-import { useToggle } from "react-use";
 
 export const tagsStore = makeAutoObservable({
-  tags: [
-    { id: 1, text: "dev", color: "#436543" },
-    { id: 2, text: "fd", color: "#433243" },
-    { id: 3, text: "soft", color: "#434343" },
-  ],
+  tags: [],
 
   tag: {},
-
   loading: false,
-  activeCreate: false,
-  activeEdit: false,
-  tagActive: {
-    text: "",
-    color: "",
-  },
+  filtered: [],
 
   async getAll() {
     try {
       this.setLoading();
-      const data = await tagAPI.getAll();
+      const data = await tagAPI.get();
       this.tags = data.data;
+      this.filtered = this.tags;
       this.setLoading();
     } catch (e) {
       this.setLoading();
       notification.setInfo("error", e.message);
     }
   },
-  async get(id) {
-    try {
-      const data = await tagAPI.get(id);
-      this.tag = data.tag;
-    } catch (e) {
-      notification.setInfo("error", e.message);
-    }
-  },
+  // async get(id) {
+  //   try {
+  //     const data = await tagAPI.get(id);
+  //     this.tag = data.tag;
+  //   } catch (e) {
+  //     notification.setInfo("error", e.message);
+  //   }
+  // },
 
-  async create(form) {
+  async save(form) {
     try {
       this.setLoading();
-      const data = await tagAPI.create(form);
-      this.tags = [...this.tags, data.data];
-
+      if (form.id) {
+        await tagAPI.update(form);
+        this.tags = this.tags.map((item) => {
+          if (item.id === form.id) {
+            item = form;
+          }
+          return item;
+        });
+      } else {
+        const data = await tagAPI.create(form);
+        this.tags = [...this.tags, data.data];
+      }
+      this.filtered = this.tags;
       this.setLoading();
     } catch (e) {
       notification.setInfo("error", e.message);
@@ -54,8 +54,9 @@ export const tagsStore = makeAutoObservable({
   async delete(arrayId) {
     try {
       this.setLoading();
-      // const data = await tagAPI.delete(id);
+      const data = await tagAPI.delete(arrayId);
       this.tags = this.tags.filter((item) => !arrayId.includes(item.id));
+      this.filtered = this.tags;
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -63,26 +64,25 @@ export const tagsStore = makeAutoObservable({
     }
   },
 
-  resetTagActive() {
-    this.tagActive = {
-      text: "",
-      color: "#FF6900",
-    };
+  onSearch(value) {
+    this.filtered = this.tags.filter((item) => {
+      let bool = false;
+      if (!value) bool = true;
+
+      for (let i in item) {
+        if (
+          value &&
+          String(item[i]).toLowerCase().includes(value.toLowerCase())
+        ) {
+          bool = true;
+        }
+      }
+
+      return bool;
+    });
   },
 
   setLoading() {
     this.loading = !this.loading;
-  },
-  setActiveCreate() {
-    this.activeCreate = !this.activeCreate;
-    if (this.activeCreate) {
-      this.resetTagActive();
-    }
-  },
-  setActiveEdit() {
-    this.activeEdit = !this.activeEdit;
-    if (this.activeCreate) {
-      this.resetTagActive();
-    }
   },
 });

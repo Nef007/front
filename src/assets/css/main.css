@@ -1,4 +1,4 @@
-
+@import "@yaireo/tagify/dist/tagify.css";
 
 /* ==========================================================================
    Author's custom styles
@@ -324,7 +324,23 @@ button:focus,
     display: block;
 }
 
-
+.react-tel-input .form-control {
+    position: relative;
+    letter-spacing: .01rem;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-left: 48px;
+    margin-left: 0;
+    line-height: 25px;
+    height: 35px;
+    width: 100%;
+    outline: none;
+    font-size: 1rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+}
 
 
 

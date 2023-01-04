@@ -1,133 +1,97 @@
-import { observer } from "mobx-react-lite";
-import { useRootStore } from "../../store";
 import { SelectCustom } from "../../components/CustomSelect/SelectCustom";
-import { useEffect, useState } from "react";
+import { Button, Modal } from "react-bootstrap";
+import Tagify from "../../components/CustomSelect/Tagify";
 
-export const ModalContact = observer(({ active, onClose }) => {
-  const { contactsStore } = useRootStore();
-  const [form, setForm] = useState(contactsStore.contactActive);
+import { useLogger } from "react-use";
+import PhoneInput from "react-phone-input-2";
 
-  useEffect(() => {
-    setForm(contactsStore.contactActive);
-  }, [contactsStore.contactActive]);
-
+export const ModalContact = ({
+  active,
+  onClose,
+  form,
+  onSubmit,
+  title,
+  setForm,
+}) => {
   const onChange = (e) => {
+    console.log("111", e);
+    console.log("222", form);
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const onChangeSelect = (data) => {
-    let tags = data.map((item) => ({ id: item.value, text: item.label }));
-    setForm({
-      ...form,
-      tags,
-    });
-  };
-
-  const onSave = async () => {
-    await contactsStore.saveContact(form);
-  };
-
   return (
-    <>
-      <div
-        onClick={onClose}
-        className={`modal modal-backdrop fade ${active ? "show" : ""}  `}
-        id="contactsEditModal"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div onClick={(e) => e.stopPropagation()} className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">
-                {contactsStore.activeModalCreate
-                  ? "Создание контакта"
-                  : "Редактирование контакта"}
-              </h1>
-              <button
-                onClick={onClose}
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <form>
-                <div className="mb-3">
-                  <label htmlFor="recipient-name" className="col-form-label">
-                    Имя:
-                  </label>
-                  <input
-                    onChange={onChange}
-                    value={form.firstname}
-                    type="text"
-                    name="firstname"
-                    className="form-control"
-                    id="recipient-name"
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="recipient-email" className="col-form-label">
-                    Почта:
-                  </label>
-                  <input
-                    onChange={onChange}
-                    value={form.email}
-                    type="email"
-                    name="email"
-                    className="form-control"
-                    id="recipient-email"
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="recipient-phone" className="col-form-label">
-                    Телефон:
-                  </label>
-                  <input
-                    onChange={onChange}
-                    value={form.phone}
-                    name="phone"
-                    type="tel"
-                    className="form-control"
-                    id="recipient-phone"
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="recipient-phone" className="col-form-label">
-                    Теги:
-                  </label>
-                  <SelectCustom
-                    defaultValue={form.tags.map((item) => ({
-                      value: item.id,
-                      label: item.text,
-                    }))}
-                    onChange={onChangeSelect}
-                  />
-                </div>
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button
-                onClick={onClose}
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Закрыть
-              </button>
-              <button
-                onClick={onSave}
-                type="button"
-                className="btn btn-primary"
-              >
-                Сохранить
-              </button>
-            </div>
+    <Modal show={active} onHide={onClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <form onSubmit={onSubmit}>
+        <Modal.Body>
+          <div className="mb-3">
+            <label htmlFor="recipient-name" className="col-form-label">
+              Имя:
+            </label>
+            <input
+              autoComplete="disabled"
+              required
+              onChange={onChange}
+              value={form.firstname}
+              type="text"
+              name="firstname"
+              className="form-control"
+              id="recipient-name"
+            />
           </div>
-        </div>
-      </div>
-    </>
+          <div className="mb-3">
+            <label htmlFor="recipient-email" className="col-form-label">
+              Почта:
+            </label>
+            <input
+              autoComplete="disabled"
+              onChange={onChange}
+              value={form.email}
+              type="email"
+              name="email"
+              className="form-control"
+              id="recipient-email"
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="recipient-phone" className="col-form-label">
+              Телефон:
+            </label>
+            <PhoneInput
+              inputProps={{
+                className: "form-control",
+                name: "phone",
+              }}
+              country={"ru"}
+              value={form.phone}
+              onChange={(data) =>
+                onChange({
+                  target: {
+                    value: data,
+                    name: "phone",
+                  },
+                })
+              }
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="recipient-phone" className="col-form-label">
+              Теги:
+            </label>
+            <Tagify defaultValue={form.tags} onChange={onChange} />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={onClose}>
+            Закрыть
+          </Button>
+          <Button variant="primary" type="submit">
+            Сохранить
+          </Button>
+        </Modal.Footer>
+      </form>
+    </Modal>
   );
-});
+};

@@ -1,7 +1,10 @@
 import "./assets/css/normalize.css";
-import "./assets/css/bootstrap.min.css";
-import "./assets/css/main.css";
+//import "./assets/js/bootstrap/bootstrap.bundle.min";
+
+import "react-phone-input-2/lib/style.css";
 import "antd/dist/antd.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./assets/css/main.css";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { useRootStore } from "./store";
@@ -12,6 +15,7 @@ import { TagPage } from "./page/tags/Tag.page";
 import { ContactPage } from "./page/contact/Contact.page";
 import { message } from "antd";
 import { ScrollButton } from "./components/ScrollButton";
+import { Toast, ToastContainer } from "react-bootstrap";
 
 export const App = observer(() => {
   const { notification, tagsStore, contactsStore } = useRootStore();
@@ -27,6 +31,21 @@ export const App = observer(() => {
 
   return (
     <>
+      {/*<ToastContainer position="top-end" className="p-3">*/}
+      {/*  <Toast>*/}
+      {/*    <Toast.Header>*/}
+      {/*      <strong className="me-auto">Bootstrap</strong>*/}
+      {/*    </Toast.Header>*/}
+      {/*    <Toast.Body>See? Just like this.</Toast.Body>*/}
+      {/*  </Toast>*/}
+      {/*  <Toast>*/}
+      {/*    <Toast.Header>*/}
+      {/*      <strong className="me-auto">Bootstrap</strong>*/}
+      {/*      <small className="text-muted">2 seconds ago</small>*/}
+      {/*    </Toast.Header>*/}
+      {/*    <Toast.Body>Heads up, toasts will stack automatically</Toast.Body>*/}
+      {/*  </Toast>*/}
+      {/*</ToastContainer>*/}
       <Header />
       <Routes>
         <Route path="/tags" element={<TagPage />} />
