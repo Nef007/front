@@ -9,7 +9,7 @@ export const tagsStore = makeAutoObservable({
   loading: false,
   filtered: [],
 
-  async getAll() {
+  async get() {
     try {
       this.setLoading();
       const data = await tagAPI.get();
@@ -51,10 +51,22 @@ export const tagsStore = makeAutoObservable({
       notification.setInfo("error", e.message);
     }
   },
-  async delete(arrayId) {
+  async delete(id) {
     try {
       this.setLoading();
-      const data = await tagAPI.delete(arrayId);
+      const data = await tagAPI.delete(id);
+      this.tags = this.tags.filter((item) => item.id !== id);
+      this.filtered = this.tags;
+      this.setLoading();
+    } catch (e) {
+      this.setLoading();
+      notification.setInfo("error", e.message);
+    }
+  },
+  async deleteArray(arrayId) {
+    try {
+      this.setLoading();
+      const data = await tagAPI.deleteArray(arrayId);
       this.tags = this.tags.filter((item) => !arrayId.includes(item.id));
       this.filtered = this.tags;
       this.setLoading();

@@ -28,7 +28,10 @@ export const contactAPI = {
   },
 
   async delete(id) {
-    return await axios.delete(`${BASE_URL}/api/contacts`);
+    return await axios.delete(`${BASE_URL}/api/contacts/${id}`);
+  },
+  async deleteArray(arrayId) {
+    return await axios.delete(`${BASE_URL}/api/contacts`, { data: arrayId });
   },
   async addTags(form) {
     return await axios.post(`${BASE_URL}/contacts/export`, form);
@@ -52,7 +55,10 @@ export const tagAPI = {
     return await axios.put(`${BASE_URL}/api/tags/${form.id}`, form);
   },
 
-  async delete(arrayId) {
+  async delete(id) {
+    return await axios.delete(`${BASE_URL}/api/tags/${id}`);
+  },
+  async deleteArray(arrayId) {
     return await axios.delete(`${BASE_URL}/api/tags/`, { data: arrayId });
   },
 };

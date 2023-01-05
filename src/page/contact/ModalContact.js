@@ -1,21 +1,20 @@
-import { SelectCustom } from "../../components/CustomSelect/SelectCustom";
 import { Button, Modal } from "react-bootstrap";
 import Tagify from "../../components/CustomSelect/Tagify";
 
-import { useLogger } from "react-use";
 import PhoneInput from "react-phone-input-2";
+import { useState } from "react";
 
 export const ModalContact = ({
   active,
-  onClose,
   form,
+  setForm,
+  onClose,
   onSubmit,
   title,
-  setForm,
+  tags,
+  setTags,
 }) => {
   const onChange = (e) => {
-    console.log("111", e);
-    console.log("222", form);
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -32,7 +31,6 @@ export const ModalContact = ({
             </label>
             <input
               autoComplete="disabled"
-              required
               onChange={onChange}
               value={form.firstname}
               type="text"
@@ -80,7 +78,7 @@ export const ModalContact = ({
             <label htmlFor="recipient-phone" className="col-form-label">
               Теги:
             </label>
-            <Tagify defaultValue={form.tags} onChange={onChange} />
+            <Tagify defaultValue={tags} onChange={setTags} />
           </div>
         </Modal.Body>
         <Modal.Footer>

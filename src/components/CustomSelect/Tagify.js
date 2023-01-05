@@ -77,7 +77,7 @@ const Tagify = observer(
     }
     const onChangeT = (e) => {
       console.log("CHANGED:", e.detail.tagify.getCleanValue());
-      onChange({
+      return {
         target: {
           name: "tags",
           value: e.detail.tagify.getCleanValue().map((item) => ({
@@ -86,7 +86,7 @@ const Tagify = observer(
             text: item.value,
           })),
         },
-      });
+      };
     };
 
     const onAddT = (e) => {
@@ -114,7 +114,15 @@ const Tagify = observer(
           id: item.id,
           color: item.color,
         }))}
-        onChange={onChangeT}
+        onChange={(e) =>
+          onChange(
+            e.detail.tagify.getCleanValue().map((item) => ({
+              id: item.id,
+              color: item.color,
+              text: item.value,
+            }))
+          )
+        }
         // autoFocus={true}
         onAdd={onAddT}
         onRemove={onRemoveT}

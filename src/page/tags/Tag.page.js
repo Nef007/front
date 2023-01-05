@@ -18,6 +18,10 @@ export const TagPage = observer(() => {
 
   const [valueSearch, setValueSearch] = useState("");
 
+  useEffect(() => {
+    tagsStore.get();
+  }, []);
+
   const onEdit = (record) => {
     setForm(record);
     setActiveModalEdit();
@@ -41,10 +45,6 @@ export const TagPage = observer(() => {
     }
   };
 
-  useEffect(() => {
-    tagsStore.getAll();
-  }, []);
-
   const onSelectAllRows = () => {
     setSelectedRowKeys(tagsStore.tags.map((item) => item.id));
   };
@@ -55,7 +55,7 @@ export const TagPage = observer(() => {
   };
 
   const onDeleteContact = () => {
-    tagsStore.delete(selectedRowKeys);
+    tagsStore.deleteArray(selectedRowKeys);
     setSelectedRowKeys([]);
   };
 
@@ -96,7 +96,7 @@ export const TagPage = observer(() => {
             <em className="fa fa-pencil"></em>
           </a>{" "}
           <a
-            onClick={() => tagsStore.delete([record.id])}
+            onClick={() => tagsStore.delete(record.id)}
             className="btn btn-danger"
           >
             <em className="fa fa-trash"></em>

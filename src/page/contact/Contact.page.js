@@ -23,20 +23,23 @@ export const ContactPage = observer(() => {
   const [activeModalEdit, setActiveModalEdit] = useToggle(false);
   const [activeTagsEdit, setActiveTagsEdit] = useToggle(false);
   const [activeModalCreate, setActiveModalCreate] = useToggle(false);
+
+  const [tagsForm, setTagsForm] = useState({
+    contacts: [],
+    tags: [],
+  });
+  const [alert, setAlert] = useState("");
   const [form, setForm] = useState({
     firstname: "",
     email: "",
     phone: "",
     tags: [],
   });
-  const [tagsForm, setTagsForm] = useState({
-    contacts: [],
-    tags: [],
-  });
-  const [alert, setAlert] = useState("");
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
     contactsStore.get();
+    tagsStore.get();
   }, []);
   useEffect(() => {}, [contactsStore.idLoadingSelect]);
 
@@ -46,6 +49,7 @@ export const ContactPage = observer(() => {
 
   const onEdit = (record) => {
     setForm(record);
+    setTags(record.tags);
     setActiveModalEdit();
   };
   const onCreate = () => {
@@ -53,8 +57,8 @@ export const ContactPage = observer(() => {
       firstname: "",
       email: "",
       phone: "",
-      tags: [],
     });
+    setTags([]);
     setActiveModalCreate();
   };
 
@@ -79,7 +83,7 @@ export const ContactPage = observer(() => {
 
   const onSaveContact = async (e) => {
     e.preventDefault();
-    await contactsStore.saveContact(form);
+    await contactsStore.saveContact({ ...form, tags });
     setActiveModalCreate();
   };
   const onSaveTags = async (e) => {
@@ -101,7 +105,7 @@ export const ContactPage = observer(() => {
     contactsStore.onSearch(valueSearch);
   };
   const onDeleteContact = () => {
-    contactsStore.delete(selectedRowKeys);
+    contactsStore.deleteArray(selectedRowKeys);
     setSelectedRowKeys([]);
   };
 
@@ -119,7 +123,7 @@ export const ContactPage = observer(() => {
             <em className="fa fa-pencil"></em>
           </a>{" "}
           <a
-            onClick={() => contactsStore.delete([record.id])}
+            onClick={() => contactsStore.delete(record.id)}
             className="btn btn-danger"
           >
             <em className="fa fa-trash"></em>
@@ -284,6 +288,8 @@ export const ContactPage = observer(() => {
         onClose={setActiveModalCreate}
         form={form}
         setForm={setForm}
+        tags={tags}
+        setTags={setTags}
         onSubmit={onSaveContact}
         title="Создание контакта"
       />
@@ -292,6 +298,8 @@ export const ContactPage = observer(() => {
         onClose={setActiveModalEdit}
         form={form}
         setForm={setForm}
+        tags={tags}
+        setTags={setTags}
         onSubmit={onSaveContact}
         title="Редактирование контакта"
       />
