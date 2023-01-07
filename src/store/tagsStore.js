@@ -4,7 +4,6 @@ import { notification } from "./notificationStore";
 
 export const tagsStore = makeAutoObservable({
   tags: [],
-
   tag: {},
   loading: false,
   filtered: [],

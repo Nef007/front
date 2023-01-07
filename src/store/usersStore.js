@@ -3,8 +3,8 @@
 //
 // import { currentUserStore } from "./currentUserStore";
 //
-// export const usersStore = makeAutoObservable({
-//   users: [],
+// export const authStore = makeAutoObservable({
+//   isAuth: false,
 //   loading: false,
 //   pagination: {
 //     current: 1,

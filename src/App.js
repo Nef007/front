@@ -16,10 +16,16 @@ import { ContactPage } from "./page/contact/Contact.page";
 import { message } from "antd";
 import { ScrollButton } from "./components/ScrollButton";
 import { Toast, ToastContainer } from "react-bootstrap";
+import { AuthPage } from "./page/auth/Auth.page";
+import { Loader } from "./components/Loader/Loader";
 
 export const App = observer(() => {
-  const { notification, tagsStore, contactsStore } = useRootStore();
+  const { notification, authStore, contactsStore } = useRootStore();
   const { info } = notification;
+
+  useEffect(() => {
+    authStore.initializedApp();
+  }, []);
 
   useEffect(() => {
     if (info.message) {
@@ -29,23 +35,12 @@ export const App = observer(() => {
     }
   }, [info]);
 
-  return (
+  if (!authStore.initialized) {
+    return <Loader />;
+  }
+
+  return authStore.isAuth ? (
     <>
-      {/*<ToastContainer position="top-end" className="p-3">*/}
-      {/*  <Toast>*/}
-      {/*    <Toast.Header>*/}
-      {/*      <strong className="me-auto">Bootstrap</strong>*/}
-      {/*    </Toast.Header>*/}
-      {/*    <Toast.Body>See? Just like this.</Toast.Body>*/}
-      {/*  </Toast>*/}
-      {/*  <Toast>*/}
-      {/*    <Toast.Header>*/}
-      {/*      <strong className="me-auto">Bootstrap</strong>*/}
-      {/*      <small className="text-muted">2 seconds ago</small>*/}
-      {/*    </Toast.Header>*/}
-      {/*    <Toast.Body>Heads up, toasts will stack automatically</Toast.Body>*/}
-      {/*  </Toast>*/}
-      {/*</ToastContainer>*/}
       <Header />
       <Routes>
         <Route path="/tags" element={<TagPage />} />
@@ -54,5 +49,7 @@ export const App = observer(() => {
       </Routes>
       <ScrollButton />
     </>
+  ) : (
+    <AuthPage />
   );
 });
