@@ -43,7 +43,7 @@ export const tagsStore = makeAutoObservable({
         });
       } else {
         const data = await tagAPI.create(form);
-        this.tags = [...this.tags, data.data.data];
+        this.tags = [...this.tags, data.data];
       }
       this.filtered = this.tags;
       this.setLoading();
@@ -66,7 +66,10 @@ export const tagsStore = makeAutoObservable({
   async deleteArray(arrayId) {
     try {
       this.setLoading();
-      const data = await tagAPI.deleteArray(arrayId);
+      for (let id of arrayId) {
+        await tagAPI.delete(id);
+      }
+      // const data = await tagAPI.deleteArray(arrayId);
       this.tags = this.tags.filter((item) => !arrayId.includes(item.id));
       this.filtered = this.tags;
       this.setLoading();

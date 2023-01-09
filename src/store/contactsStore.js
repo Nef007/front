@@ -46,7 +46,11 @@ export const contactsStore = makeAutoObservable({
   async deleteArray(arrayId) {
     try {
       this.setLoading();
-      await contactAPI.deleteArray(arrayId);
+
+      for (let id of arrayId) {
+        await contactAPI.delete(id);
+      }
+
       this.contacts = this.contacts.filter(
         (item) => !arrayId.includes(item.id)
       );
