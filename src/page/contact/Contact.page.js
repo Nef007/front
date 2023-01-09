@@ -21,8 +21,8 @@ export const ContactPage = observer(() => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [valueSearch, setValueSearch] = useState("");
   const [file, setFile] = useState();
-  const [activeModalEdit, setActiveModalEdit] = useToggle(false);
   const [activeTagsEdit, setActiveTagsEdit] = useToggle(false);
+  const [activeModalEdit, setActiveModalEdit] = useToggle(false);
   const [activeModalCreate, setActiveModalCreate] = useToggle(false);
 
   const [tagsForm, setTagsForm] = useState({
@@ -88,7 +88,8 @@ export const ContactPage = observer(() => {
   const onSaveContact = async (e) => {
     e.preventDefault();
     await contactsStore.saveContact({ ...form, tags });
-    setActiveModalCreate();
+    setActiveModalCreate(false);
+    setActiveModalEdit(false);
   };
   const onSaveTags = async (e) => {
     e.preventDefault();
@@ -175,10 +176,10 @@ export const ContactPage = observer(() => {
             defaultValue={record.tags}
             loading={contactsStore.idLoadingSelect === record.id}
             onAdd={(value) =>
-              contactsStore.addTags({ contactId: record.id, id: value.id })
+              contactsStore.saveContact({ ...record, tags: value })
             }
             onRemove={(value) =>
-              contactsStore.removeTags({ contactId: record.id, id: value.id })
+              contactsStore.saveContact({ ...record, tags: value })
             }
           />
         ),

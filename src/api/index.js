@@ -51,11 +51,22 @@ export const contactAPI = {
   },
 
   async update(form) {
-    return await axios.put(`${BASE_URL}/contacts`, form, {
+    return await axios.put(`${BASE_URL}/contacts/${form.id}`, form, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
     });
+  },
+  async updateTags(form) {
+    return await axios.put(
+      `${BASE_URL}/contacts/${form.contactId}`,
+      form.tags,
+      {
+        headers: {
+          Authorization: "Bearer " + getToken(),
+        },
+      }
+    );
   },
 
   async delete(id) {

@@ -90,7 +90,7 @@ const Tagify = observer(
     };
 
     const onAddT = (e) => {
-      console.log("ADD:", e.detail.data);
+      console.log("ADD:", e);
       onAdd(e.detail.data);
     };
     const onRemoveT = (e) => {
@@ -124,8 +124,24 @@ const Tagify = observer(
           )
         }
         // autoFocus={true}
-        onAdd={onAddT}
-        onRemove={onRemoveT}
+        onAdd={(e) =>
+          onAdd(
+            e.detail.tagify.getCleanValue().map((item) => ({
+              id: item.id,
+              color: item.color,
+              text: item.value,
+            }))
+          )
+        }
+        onRemove={(e) =>
+          onRemove(
+            e.detail.tagify.getCleanValue().map((item) => ({
+              id: item.id,
+              color: item.color,
+              text: item.value,
+            }))
+          )
+        }
       />
     );
   }

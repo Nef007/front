@@ -57,6 +57,25 @@ export const contactsStore = makeAutoObservable({
       notification.setInfo("error", e.message);
     }
   },
+
+  async onUpdateTags(form) {
+    try {
+      this.setLoading();
+      await contactAPI.updateTags(form);
+      this.contacts = this.contacts.map((item) => {
+        if (item.id === form.contactId) {
+          item.tags = form.tags;
+        }
+        return item;
+      });
+      this.filtered = this.contacts;
+      this.setLoading();
+    } catch (e) {
+      this.setLoading();
+      notification.setInfo("error", e.message);
+    }
+  },
+
   async saveContact(form) {
     try {
       this.setLoading();
@@ -70,7 +89,7 @@ export const contactsStore = makeAutoObservable({
         });
       } else {
         const data = await contactAPI.create(form);
-        this.contacts = [...this.contacts, data.data.data];
+        this.contacts = [...this.contacts, data.data];
       }
       this.filtered = this.contacts;
       this.setLoading();
