@@ -12,7 +12,8 @@ export const tagsStore = makeAutoObservable({
     try {
       this.setLoading();
       const data = await tagAPI.get();
-      this.tags = data.data;
+      this.tags = data.data.data;
+      console.log(this.tags);
       this.filtered = this.tags;
       this.setLoading();
     } catch (e) {
@@ -42,7 +43,7 @@ export const tagsStore = makeAutoObservable({
         });
       } else {
         const data = await tagAPI.create(form);
-        this.tags = [...this.tags, data.data];
+        this.tags = [...this.tags, data.data.data];
       }
       this.filtered = this.tags;
       this.setLoading();

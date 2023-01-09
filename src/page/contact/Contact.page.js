@@ -11,7 +11,8 @@ import { useToggle } from "react-use";
 import Tagify from "../../components/CustomSelect/Tagify";
 import { Button } from "react-bootstrap";
 import { ModalTagsEdit } from "./ModalTagsEdit";
-import { BASE_URL } from "../../api";
+import { BASE_URL, contactAPI } from "../../api";
+import download from "downloadjs";
 const phoneNumberFormatter = require("phone-number-formats");
 
 export const ContactPage = observer(() => {
@@ -77,8 +78,11 @@ export const ContactPage = observer(() => {
     }
   };
   const onDownloadFile = async (e) => {
-    e.preventDefault();
-    window.location.href = `${BASE_URL}/contacts/export`;
+    // e.preventDefault();
+    await contactAPI.download();
+    //  console.log("44444", data.data);
+
+    //  window.location.href = `${BASE_URL}/contacts/export`;
   };
 
   const onSaveContact = async (e) => {
@@ -165,18 +169,19 @@ export const ContactPage = observer(() => {
       // filteredValue: filteredInfo.address || null,
       onFilter: (value, record) =>
         record.tags.some((item) => item.text.includes(value)),
-      render: (record) => (
-        <Tagify
-          defaultValue={record.tags}
-          loading={contactsStore.idLoadingSelect === record.id}
-          onAdd={(value) =>
-            contactsStore.addTags({ contactId: record.id, id: value.id })
-          }
-          onRemove={(value) =>
-            contactsStore.removeTags({ contactId: record.id, id: value.id })
-          }
-        />
-      ),
+      render: (record) =>
+        record && (
+          <Tagify
+            defaultValue={record.tags}
+            loading={contactsStore.idLoadingSelect === record.id}
+            onAdd={(value) =>
+              contactsStore.addTags({ contactId: record.id, id: value.id })
+            }
+            onRemove={(value) =>
+              contactsStore.removeTags({ contactId: record.id, id: value.id })
+            }
+          />
+        ),
     },
   ];
 

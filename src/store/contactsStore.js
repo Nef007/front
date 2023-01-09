@@ -23,7 +23,7 @@ export const contactsStore = makeAutoObservable({
     try {
       this.setLoading();
       const data = await contactAPI.get(form);
-      this.contacts = data.data;
+      this.contacts = data.data.data;
       this.filtered = this.contacts;
       this.setLoading();
     } catch (e) {
@@ -70,7 +70,7 @@ export const contactsStore = makeAutoObservable({
         });
       } else {
         const data = await contactAPI.create(form);
-        this.contacts = [...this.contacts, data.data];
+        this.contacts = [...this.contacts, data.data.data];
       }
       this.filtered = this.contacts;
       this.setLoading();
@@ -94,16 +94,16 @@ export const contactsStore = makeAutoObservable({
       notification.setInfo("error", e.message);
     }
   },
-  async downloadFile() {
-    try {
-      const data = await contactAPI.download();
-      download(data.data, "output.xlsx", "text/plain");
-      // this.contacts = data.data;
-      // this.filtered = this.contacts;
-    } catch (e) {
-      notification.setInfo("error", e.message);
-    }
-  },
+  // async downloadFile() {
+  //   try {
+  //     const data = await contactAPI.download();
+  //     download(data.data, "output.xlsx", "text/plain");
+  //     // this.contacts = data.data;
+  //     // this.filtered = this.contacts;
+  //   } catch (e) {
+  //     notification.setInfo("error", e.message);
+  //   }
+  // },
 
   async addTags(form) {
     try {
@@ -111,7 +111,7 @@ export const contactsStore = makeAutoObservable({
       const data = await contactAPI.addTags(form);
       this.contacts = this.contacts.map((item) => {
         if (item.id === form.contactId) {
-          item.tags = [...item.tags, data.data];
+          item.tags = [...item.tags, data.data.data];
         }
         return item;
       });

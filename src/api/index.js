@@ -1,4 +1,5 @@
 import axios from "axios";
+import download from "downloadjs";
 axios.defaults.headers.common["X-CSRF-TOKEN"] = window.csrf_token;
 
 export let BASE_URL = "http://xeonnull.com:444";
@@ -9,7 +10,7 @@ function getToken() {
 
 export const contactAPI = {
   async create(form) {
-    return await axios.post(`${BASE_URL}/api/contacts`, form, {
+    return await axios.post(`${BASE_URL}/contacts`, form, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -25,15 +26,24 @@ export const contactAPI = {
     });
   },
   async download() {
-    return await axios.get(`${BASE_URL}/contacts/export`, {
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
+    // return await axios.get(`${BASE_URL}/contacts/export`, {
+    //   headers: {
+    //     Authorization: "Bearer " + getToken(),
+    //   },
+    // });
+
+    axios({
+      url: `${BASE_URL}/contacts/export`,
+      method: "GET",
+      headers: { Authorization: "Bearer " + getToken() },
+      responseType: "blob", // Important
+    }).then((response) => {
+      download(response.data, "contacts.xlsx");
     });
   },
 
   async get() {
-    return await axios.get(`${BASE_URL}/api/contacts`, {
+    return await axios.get(`${BASE_URL}/contacts`, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -41,7 +51,7 @@ export const contactAPI = {
   },
 
   async update(form) {
-    return await axios.put(`${BASE_URL}/api/contacts`, form, {
+    return await axios.put(`${BASE_URL}/contacts`, form, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -49,7 +59,7 @@ export const contactAPI = {
   },
 
   async delete(id) {
-    return await axios.delete(`${BASE_URL}/api/contacts/${id}`, {
+    return await axios.delete(`${BASE_URL}/contacts/${id}`, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -57,7 +67,7 @@ export const contactAPI = {
   },
   async deleteArray(arrayId) {
     return await axios.delete(
-      `${BASE_URL}/api/contacts`,
+      `${BASE_URL}/contacts`,
       { data: arrayId },
       {
         headers: {
@@ -88,14 +98,14 @@ export const contactAPI = {
 
 export const tagAPI = {
   async create(form) {
-    return await axios.post(`${BASE_URL}/api/tags`, form, {
+    return await axios.post(`${BASE_URL}/tags`, form, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
     });
   },
   async get() {
-    return await axios.get(`${BASE_URL}/api/tags`, {
+    return await axios.get(`${BASE_URL}/tags`, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -105,7 +115,7 @@ export const tagAPI = {
   //   return await axios.get("/api/tags");
   // },
   async update(form) {
-    return await axios.put(`${BASE_URL}/api/tags/${form.id}`, form, {
+    return await axios.put(`${BASE_URL}/tags/${form.id}`, form, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -113,7 +123,7 @@ export const tagAPI = {
   },
 
   async delete(id) {
-    return await axios.delete(`${BASE_URL}/api/tags/${id}`, {
+    return await axios.delete(`${BASE_URL}/tags/${id}`, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -121,7 +131,7 @@ export const tagAPI = {
   },
   async deleteArray(arrayId) {
     return await axios.delete(
-      `${BASE_URL}/api/tags/`,
+      `${BASE_URL}/tags/`,
       { data: arrayId },
       {
         headers: {
