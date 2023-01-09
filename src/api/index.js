@@ -43,7 +43,7 @@ export const contactAPI = {
   },
 
   async get() {
-    return await axios.get(`${BASE_URL}/contacts`, {
+    return await axios.get(`${BASE_URL}/contacts?offset=0&limit=9999999999`, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
@@ -105,7 +105,7 @@ export const tagAPI = {
     });
   },
   async get() {
-    return await axios.get(`${BASE_URL}/tags`, {
+    return await axios.get(`${BASE_URL}/tags?offset=0&limit=9999999999`, {
       headers: {
         Authorization: "Bearer " + getToken(),
       },
