@@ -86,7 +86,7 @@ export const contactsStore = makeAutoObservable({
       if (form.id) {
         delete form.lastname;
         delete form.patrony;
-        const data = await contactAPI.update(form);
+        await contactAPI.update(form);
         this.contacts = this.contacts.map((item) => {
           if (item.id === form.id) {
             item = form;
@@ -129,6 +129,22 @@ export const contactsStore = makeAutoObservable({
   //     notification.setInfo("error", e.message);
   //   }
   // },
+
+  async addManyTags(data) {
+    try {
+      for (let item of this.contacts) {
+        if (data.contacts.includes(item.id)) {
+          await this.saveContact({
+            ...item,
+            tags: [...item.tags, ...data.tags],
+          });
+        }
+      }
+    } catch (e) {
+      this.setLoadingSelect("");
+      notification.setInfo("error", e.message);
+    }
+  },
 
   async addTags(form) {
     try {

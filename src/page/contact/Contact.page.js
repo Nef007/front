@@ -38,9 +38,9 @@ export const ContactPage = observer(() => {
   });
   const [tags, setTags] = useState([]);
 
-  useEffect(() => {
-    contactsStore.get();
-    tagsStore.get();
+  useEffect(async () => {
+    await tagsStore.get();
+    await contactsStore.get();
   }, []);
   useEffect(() => {}, [contactsStore.idLoadingSelect]);
 
@@ -99,14 +99,13 @@ export const ContactPage = observer(() => {
     if (!tagsForm.tags.length) {
       return setAlert("Введите теги");
     }
-    console.log({ ...tagsForm, contacts: selectedRowKeys });
-    // await contactsStore.saveTags({ ...tagsForm, contacts: selectedRowKeys });
+    //  console.log({ ...tagsForm });
+    await contactsStore.addManyTags({ ...tagsForm });
     setActiveTagsEdit();
   };
 
   const onSearch = (e) => {
     e.preventDefault();
-    console.log("value", valueSearch);
     contactsStore.onSearch(valueSearch);
   };
   const onDeleteContact = () => {
@@ -185,6 +184,8 @@ export const ContactPage = observer(() => {
         ),
     },
   ];
+
+  console.log(111111111, contactsStore.filtered);
 
   return (
     <main className="main-content">

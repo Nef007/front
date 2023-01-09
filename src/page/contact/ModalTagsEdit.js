@@ -13,7 +13,7 @@ export const ModalTagsEdit = ({
 }) => {
   const onChange = (e) => {
     setAlert("");
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({ ...form, tags: e });
   };
 
   return (
@@ -24,7 +24,11 @@ export const ModalTagsEdit = ({
       <form onSubmit={onSubmit}>
         <Modal.Body>
           <div className="mb-3">
-            <Tagify defaultValue={form.tags} onChange={onChange} />
+            <Tagify
+              defaultValue={form.tags}
+              onAdd={onChange}
+              onRemove={onChange}
+            />
           </div>
           <div className="mb-3">Выбрано контактов: {form.contacts.length}</div>
         </Modal.Body>
