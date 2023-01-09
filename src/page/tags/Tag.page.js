@@ -28,10 +28,8 @@ export const TagPage = observer(() => {
   };
   const onCreate = () => {
     setForm({
-      firstname: "",
-      email: "",
-      phone: "",
-      tags: [],
+      text: "",
+      color: "#454545",
     });
     setActiveModalCreate();
   };
