@@ -4,7 +4,7 @@ import { Title } from "../../components/Title";
 import { PanelHeading } from "../../layout/panel-heading";
 
 import { TableCustom } from "../../components/Table/Table";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ModalContact } from "./ModalContact";
 import { SelectCustom } from "../../components/CustomSelect/SelectCustom";
 import { useToggle } from "react-use";
@@ -13,6 +13,7 @@ import { Button } from "react-bootstrap";
 import { ModalTagsEdit } from "./ModalTagsEdit";
 import { BASE_URL, contactAPI } from "../../api";
 import download from "downloadjs";
+import { notification } from "../../store/notificationStore";
 const phoneNumberFormatter = require("phone-number-formats");
 
 export const ContactPage = observer(() => {
@@ -100,7 +101,22 @@ export const ContactPage = observer(() => {
       return setAlert("Введите теги");
     }
     //  console.log({ ...tagsForm });
-    await contactsStore.addManyTags({ ...tagsForm });
+
+    try {
+      for (let item of contactsStore.filtered) {
+        if (tagsForm.contacts.includes(item.id)) {
+          await contactsStore.saveContact({
+            ...item,
+            tags: [...item.tags, ...tagsForm.tags],
+          });
+        }
+      }
+
+      window.location.reload();
+    } catch (e) {
+      notification.setInfo("error", e.message);
+    }
+    // await contactsStore.addManyTags({ ...tagsForm });
     setActiveTagsEdit();
   };
 
@@ -169,23 +185,24 @@ export const ContactPage = observer(() => {
       // filteredValue: filteredInfo.address || null,
       onFilter: (value, record) =>
         record.tags.some((item) => item.text.includes(value)),
-      render: (record) =>
-        record && (
-          <Tagify
-            defaultValue={record.tags}
-            loading={contactsStore.idLoadingSelect === record.id}
-            onAdd={(value) =>
-              contactsStore.saveContact({ ...record, tags: value })
-            }
-            onRemove={(value) =>
-              contactsStore.saveContact({ ...record, tags: value })
-            }
-          />
-        ),
+      render: (record) => {
+        return (
+          record && (
+            <Tagify
+              defaultValue={record.tags}
+              // loading={contactsStore.idLoadingSelect === record.id}
+              onAdd={(value) =>
+                contactsStore.saveContact({ ...record, tags: value })
+              }
+              onRemove={(value) =>
+                contactsStore.saveContact({ ...record, tags: value })
+              }
+            />
+          )
+        );
+      },
     },
   ];
-
-  console.log(111111111, contactsStore.filtered);
 
   return (
     <main className="main-content">
