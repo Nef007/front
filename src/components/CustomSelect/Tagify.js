@@ -30,7 +30,7 @@ const Tagify = observer(
         color: item.color,
       })), // Array of tags to suggest as the user types (can be used along with "enforceWhitelist" setting)
       blacklist: [], // A list of non-allowed tags
-      enforceWhitelist: true, // Only allow tags from the whitelist
+      enforceWhitelist: false, // Only allow tags from the whitelist
       //  userInput: true, // disable manually typing/pasting/editing tags (tags may only be added from the whitelist)
       // keepInvalidTags: false, // if true, do not remove tags which did not pass validation
       //  createInvalidTags: true, // if false, do not create invalid tags from invalid user input
