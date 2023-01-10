@@ -67,18 +67,19 @@ export const TagPage = observer(() => {
       title: "Цвет",
       dataIndex: "color",
       key: "color",
-      render: (text) => (
-        <div
-          style={{
-            width: 60,
-            height: 30,
-            backgroundColor: text,
-            borderRadius: "0.5rem",
-          }}
-        >
-          {text}
-        </div>
-      ),
+      render: (text) =>
+        text && (
+          <div
+            style={{
+              width: 60,
+              height: 30,
+              backgroundColor: text,
+              borderRadius: "0.5rem",
+            }}
+          >
+            {text}
+          </div>
+        ),
     },
     {
       title: "Редактирование",

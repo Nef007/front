@@ -46,7 +46,9 @@ export const ContactPage = observer(() => {
   useEffect(() => {}, [contactsStore.idLoadingSelect]);
 
   const onSelectAllRows = () => {
-    setSelectedRowKeys(contactsStore.contacts.map((item) => item.id));
+    let arrId = contactsStore.contacts.map((item) => item.id);
+    setTagsForm({ ...tagsForm, contacts: arrId });
+    setSelectedRowKeys(arrId);
   };
 
   const onEdit = (record) => {
