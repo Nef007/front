@@ -66,7 +66,6 @@ export const TagPage = observer(() => {
     {
       title: "Цвет",
       dataIndex: "color",
-      key: "color",
       render: (text) =>
         text && (
           <div

@@ -39,9 +39,8 @@ export const ContactPage = observer(() => {
   });
   const [tags, setTags] = useState([]);
 
-  useEffect(async () => {
-    await tagsStore.get();
-    await contactsStore.get();
+  useEffect(() => {
+    tagsStore.get().then(() => contactsStore.get());
   }, []);
   useEffect(() => {}, [contactsStore.idLoadingSelect]);
 

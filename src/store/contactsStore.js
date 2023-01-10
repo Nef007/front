@@ -84,8 +84,10 @@ export const contactsStore = makeAutoObservable({
     try {
       this.setLoading();
       if (form.id) {
-        delete form.lastname;
-        delete form.patrony;
+        if (!form.firstname) delete form.firstname;
+        if (!form.patrony) delete form.patrony;
+        if (!form.lastname) delete form.lastname;
+        if (!form.phone) delete form.phone;
         await contactAPI.update(form);
         this.contacts = this.contacts.map((item) => {
           if (item.id === form.id) {
