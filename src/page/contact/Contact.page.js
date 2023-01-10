@@ -76,6 +76,7 @@ export const ContactPage = observer(() => {
   };
 
   const onUploadFile = async (e) => {
+    e.preventDefault();
     if (file) {
       await contactsStore.uploadFile(file);
     }

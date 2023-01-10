@@ -109,7 +109,7 @@ export const contactsStore = makeAutoObservable({
     try {
       this.setLoading();
       const formData = new FormData();
-      formData.append("files", file);
+      formData.append("contacts", file);
       const data = await contactAPI.upload(formData);
       // this.contacts = data.data;
       // this.filtered = this.contacts;
