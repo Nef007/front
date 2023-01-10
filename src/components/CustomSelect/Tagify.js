@@ -17,7 +17,7 @@ const Tagify = observer(
 
     const setting = {
       delimiters: ",| ", // [RegEx] split tags by any of these delimiters ("null" to cancel) Example: ",| |."
-      pattern: /^.{0,20}$/, // RegEx pattern to validate input by. Ex: /[1-9]/
+      pattern: /^.{0,50}$/, // RegEx pattern to validate input by. Ex: /[1-9]/
       // tagTextProp: "value", // tag data Object property which will be displayed as the tag's text
       maxTags: 10, // Maximum number of tags
       // callbacks: {}, // Exposed callbacks object to be triggered on certain events
