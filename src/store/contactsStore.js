@@ -204,8 +204,13 @@ export const contactsStore = makeAutoObservable({
           bool = true;
         }
 
-        for (let text in item.tags) {
-          if (value && text.toLowerCase().includes(value.toLowerCase())) {
+        for (let tag of item.tags) {
+          console.log(tag);
+          if (
+            value &&
+            tag.text &&
+            tag.text.toLowerCase().includes(value.toLowerCase())
+          ) {
             bool = true;
           }
         }
