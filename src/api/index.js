@@ -33,7 +33,7 @@ export const contactAPI = {
     // });
 
     axios({
-      url: `${BASE_URL}/contacts/export?limit=99999&search=${search}`,
+      url: `${BASE_URL}/contacts/export?limit=999999999&search=${search}`,
       method: "GET",
       headers: { Authorization: "Bearer " + getToken() },
       responseType: "blob", // Important
