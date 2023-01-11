@@ -25,7 +25,7 @@ export const contactAPI = {
       },
     });
   },
-  async download() {
+  async download(search) {
     // return await axios.get(`${BASE_URL}/contacts/export`, {
     //   headers: {
     //     Authorization: "Bearer " + getToken(),
@@ -33,7 +33,7 @@ export const contactAPI = {
     // });
 
     axios({
-      url: `${BASE_URL}/contacts/export`,
+      url: `${BASE_URL}/contacts/export?limit=99999&search=${search}`,
       method: "GET",
       headers: { Authorization: "Bearer " + getToken() },
       responseType: "blob", // Important
@@ -42,12 +42,17 @@ export const contactAPI = {
     });
   },
 
-  async get() {
-    return await axios.get(`${BASE_URL}/contacts?offset=0&limit=9999999999`, {
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
-    });
+  async get(pagination, search = "") {
+    return await axios.get(
+      `${BASE_URL}/contacts?offset=${
+        pagination.pageSize * (pagination.current - 1)
+      }&limit=${pagination.pageSize}&search=${search}`,
+      {
+        headers: {
+          Authorization: "Bearer " + getToken(),
+        },
+      }
+    );
   },
 
   async update(form) {

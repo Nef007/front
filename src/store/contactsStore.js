@@ -14,16 +14,33 @@ export const contactsStore = makeAutoObservable({
     phone: "",
     tags: [],
   },
+  pagination: {
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  },
+
+  search: "",
 
   setForm(obj) {
     this.form = obj;
   },
 
-  async get(form) {
+  async downloadExport() {
+    try {
+      await contactAPI.download(this.search);
+    } catch (e) {
+      this.setLoading();
+      notification.setInfo("error", e.message);
+    }
+  },
+
+  async get(pagination = this.pagination, search = "") {
     try {
       this.setLoading();
-      const data = await contactAPI.get(form);
-      this.contacts = data.data.data;
+      const response = await contactAPI.get(pagination, search);
+      this.pagination = { ...pagination, total: response.data.total };
+      this.contacts = response.data.data;
       this.filtered = this.contacts;
       this.setLoading();
     } catch (e) {
@@ -191,33 +208,35 @@ export const contactsStore = makeAutoObservable({
     }
   },
 
-  onSearch(value) {
-    this.filtered = this.contacts.filter((item) => {
-      let bool = false;
-      if (!value) bool = true;
-
-      for (let i in item) {
-        if (
-          value &&
-          String(item[i]).toLowerCase().includes(value.toLowerCase())
-        ) {
-          bool = true;
-        }
-
-        for (let tag of item.tags) {
-          console.log(tag);
-          if (
-            value &&
-            tag.text &&
-            tag.text.toLowerCase().includes(value.toLowerCase())
-          ) {
-            bool = true;
-          }
-        }
-      }
-
-      return bool;
-    });
+  async onSearch(value) {
+    this.search = value;
+    await this.get(this.pagination, value);
+    // this.filtered = this.contacts.filter((item) => {
+    //   let bool = false;
+    //   if (!value) bool = true;
+    //
+    //   for (let i in item) {
+    //     if (
+    //       value &&
+    //       String(item[i]).toLowerCase().includes(value.toLowerCase())
+    //     ) {
+    //       bool = true;
+    //     }
+    //
+    //     for (let tag of item.tags) {
+    //       console.log(tag);
+    //       if (
+    //         value &&
+    //         tag.text &&
+    //         tag.text.toLowerCase().includes(value.toLowerCase())
+    //       ) {
+    //         bool = true;
+    //       }
+    //     }
+    //   }
+    //
+    //   return bool;
+    // });
   },
 
   setLoading() {

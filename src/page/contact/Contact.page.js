@@ -44,6 +44,11 @@ export const ContactPage = observer(() => {
   }, []);
   useEffect(() => {}, [contactsStore.idLoadingSelect]);
 
+  const onTableChange = async (pagination, filters, sorter) => {
+    // console.log(555555, pagination);
+    await contactsStore.get(pagination);
+  };
+
   const onSelectAllRows = () => {
     let arrId = contactsStore.contacts.map((item) => item.id);
     setTagsForm({ ...tagsForm, contacts: arrId });
@@ -82,7 +87,7 @@ export const ContactPage = observer(() => {
   };
   const onDownloadFile = async (e) => {
     // e.preventDefault();
-    await contactAPI.download();
+    await contactsStore.downloadExport();
     //  console.log("44444", data.data);
 
     //  window.location.href = `${BASE_URL}/contacts/export`;
@@ -298,6 +303,8 @@ export const ContactPage = observer(() => {
                   </div>
                 </PanelHeading>
                 <TableCustom
+                  onTableChange={onTableChange}
+                  pagination={contactsStore.pagination}
                   columns={columns}
                   loading={contactsStore.loading}
                   data={contactsStore.filtered}

@@ -7,6 +7,8 @@ export const TableCustom = ({
   loading,
   selectedRowKeys,
   setSelectedRowKeys,
+  pagination,
+  onTableChange,
 }) => {
   const onSelectChange = (newSelectedRowKeys) => {
     console.log("selectedRowKeys changed: ", newSelectedRowKeys);
@@ -20,6 +22,8 @@ export const TableCustom = ({
 
   return (
     <Table
+      onChange={onTableChange}
+      pagination={pagination}
       scroll={{ x: 990 }}
       loading={loading}
       bordered
