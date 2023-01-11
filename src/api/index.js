@@ -2,7 +2,7 @@ import axios from "axios";
 import download from "downloadjs";
 axios.defaults.headers.common["X-CSRF-TOKEN"] = window.csrf_token;
 
-export let BASE_URL = "http://xeonnull.com:444";
+export let BASE_URL = "http://ruzalgc8.beget.tech/laravel/public/";
 
 function getToken() {
   return localStorage.getItem("userData");
