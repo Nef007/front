@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { useRootStore } from "../store";
 import { NavLink } from "react-router-dom";
+import { BASE_URL } from "../api";
 export const Header = observer(() => {
   const { taskStore, notification } = useRootStore();
 
@@ -10,7 +11,7 @@ export const Header = observer(() => {
     <header className="header">
       <div className="container header__container">
         <h1 className="logo">
-          <a href="#" className="logo__img">
+          <a href="http://ruzalgc8.beget.tech/" className="logo__img">
             Contacts base
           </a>
         </h1>

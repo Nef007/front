@@ -209,8 +209,13 @@ export const contactsStore = makeAutoObservable({
   },
 
   async onSearch(value) {
+    let pagination = {
+      current: 1,
+      pageSize: 10,
+      total: 0,
+    };
     this.search = value;
-    await this.get(this.pagination, value);
+    await this.get(pagination, value);
     // this.filtered = this.contacts.filter((item) => {
     //   let bool = false;
     //   if (!value) bool = true;
