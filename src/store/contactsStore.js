@@ -35,7 +35,7 @@ export const contactsStore = makeAutoObservable({
     }
   },
 
-  async get(pagination = this.pagination, search = "") {
+  async get(pagination = this.pagination, search = this.search) {
     try {
       this.setLoading();
       const response = await contactAPI.get(pagination, search);
