@@ -47,6 +47,7 @@ export const App = observer(() => {
         <Route path="/contacts" element={<ContactPage />} />
         <Route path="/*" element={<Navigate replace to="/contacts" />} />
       </Routes>
+      <Footer />
       <ScrollButton />
     </>
   ) : (
