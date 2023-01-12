@@ -185,13 +185,13 @@ export const ContactPage = observer(() => {
     },
     {
       title: "Теги",
-      filters: tagsStore.tags.map((item) => ({
-        text: item.text,
-        value: item.text,
-      })),
+      // filters: tagsStore.tags.map((item) => ({
+      //   text: item.text,
+      //   value: item.text,
+      // })),
       // filteredValue: filteredInfo.address || null,
-      onFilter: (value, record) =>
-        record.tags.some((item) => item.text.includes(value)),
+      // onFilter: (value, record) =>
+      //   record.tags.some((item) => item.text.includes(value)),
       render: (record) => {
         return (
           record && (
