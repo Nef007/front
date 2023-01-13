@@ -26,6 +26,10 @@ export const contactsStore = makeAutoObservable({
     this.form = obj;
   },
 
+  getOffset() {
+    return this.pagination.pageSize * (this.pagination.current - 1);
+  },
+
   async downloadExport() {
     try {
       await contactAPI.download(this.search);
@@ -35,11 +39,11 @@ export const contactsStore = makeAutoObservable({
     }
   },
 
-  async get(pagination = this.pagination, search = this.search) {
+  async get(offset = 0, limit = 10, search = "") {
     try {
       this.setLoading();
-      const response = await contactAPI.get(pagination, search);
-      this.pagination = { ...pagination, total: response.data.total };
+      const response = await contactAPI.get(offset, limit, search);
+      this.pagination = { ...this.pagination, total: response.data.total };
       this.contacts = response.data.data;
       this.filtered = this.contacts;
       this.setLoading();
@@ -48,11 +52,27 @@ export const contactsStore = makeAutoObservable({
       notification.setInfo("error", e.message);
     }
   },
+
+  async getPagination(
+    pagination = {
+      current: 1,
+      pageSize: 10,
+      total: 0,
+    }
+  ) {
+    this.pagination = pagination;
+    await this.get(this.getOffset(), this.pagination.pageSize, this.search);
+  },
+
   async delete(id) {
     try {
       this.setLoading();
       await contactAPI.delete(id);
-      await this.get();
+      await this.get(
+        this.getOffset() - 1,
+        this.pagination.pageSize,
+        this.search
+      );
       // this.contacts = this.contacts.filter((item) => item.id !== id);
       // this.filtered = this.contacts;
       this.setLoading();
@@ -69,12 +89,12 @@ export const contactsStore = makeAutoObservable({
         await contactAPI.delete(id);
       }
 
-      await this.get();
+      await this.get(
+        this.getOffset() - arrayId.length,
+        this.pagination.pageSize,
+        this.search
+      );
 
-      // this.contacts = this.contacts.filter(
-      //   (item) => !arrayId.includes(item.id)
-      // );
-      // this.filtered = this.contacts;
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -140,23 +160,13 @@ export const contactsStore = makeAutoObservable({
       const data = await contactAPI.upload(formData);
       // this.contacts = data.data;
       // this.filtered = this.contacts;
-      await this.get(pagination, "");
+      await this.get(this.getOffset(), this.pagination.pageSize, this.search);
       this.setLoading();
     } catch (e) {
       this.setLoading();
       notification.setInfo("error", e.message);
     }
   },
-  // async downloadFile() {
-  //   try {
-  //     const data = await contactAPI.download();
-  //     download(data.data, "output.xlsx", "text/plain");
-  //     // this.contacts = data.data;
-  //     // this.filtered = this.contacts;
-  //   } catch (e) {
-  //     notification.setInfo("error", e.message);
-  //   }
-  // },
 
   async addManyTags(data) {
     try {
@@ -218,39 +228,8 @@ export const contactsStore = makeAutoObservable({
   },
 
   async onSearch(value) {
-    let pagination = {
-      current: 1,
-      pageSize: 10,
-      total: 0,
-    };
     this.search = value;
-    await this.get(pagination, value);
-    // this.filtered = this.contacts.filter((item) => {
-    //   let bool = false;
-    //   if (!value) bool = true;
-    //
-    //   for (let i in item) {
-    //     if (
-    //       value &&
-    //       String(item[i]).toLowerCase().includes(value.toLowerCase())
-    //     ) {
-    //       bool = true;
-    //     }
-    //
-    //     for (let tag of item.tags) {
-    //       console.log(tag);
-    //       if (
-    //         value &&
-    //         tag.text &&
-    //         tag.text.toLowerCase().includes(value.toLowerCase())
-    //       ) {
-    //         bool = true;
-    //       }
-    //     }
-    //   }
-    //
-    //   return bool;
-    // });
+    await this.get(this.getOffset(), this.pagination.pageSize, value);
   },
 
   setLoading() {

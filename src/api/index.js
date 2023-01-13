@@ -2,7 +2,7 @@ import axios from "axios";
 import download from "downloadjs";
 axios.defaults.headers.common["X-CSRF-TOKEN"] = window.csrf_token;
 
-export let BASE_URL_API = process.env.BASE_URL_API;
+export let BASE_URL_API = window.env.BASE_URL_API;
 
 function getToken() {
   return localStorage.getItem("userData");
@@ -42,7 +42,7 @@ export const contactAPI = {
     });
   },
 
-  async get(pagination, search = "") {
+  async get(offset, limit, search = "") {
     return await axios.get(
       `${BASE_URL_API}/contacts?offset=${
         pagination.pageSize * (pagination.current - 1)

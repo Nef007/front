@@ -10,7 +10,7 @@ export const Header = observer(() => {
     <header className="header">
       <div className="container header__container">
         <h1 className="logo">
-          <a href={process.env.BASE_URL} className="logo__img">
+          <a href={window.env.BASE_URL} className="logo__img">
             Contacts base
           </a>
         </h1>

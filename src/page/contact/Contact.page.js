@@ -40,7 +40,7 @@ export const ContactPage = observer(() => {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    tagsStore.get().then(() => contactsStore.get());
+    tagsStore.get().then(() => contactsStore.getPagination());
   }, []);
   useEffect(() => {}, [contactsStore.idLoadingSelect]);
 
