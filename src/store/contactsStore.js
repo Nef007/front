@@ -52,8 +52,9 @@ export const contactsStore = makeAutoObservable({
     try {
       this.setLoading();
       await contactAPI.delete(id);
-      this.contacts = this.contacts.filter((item) => item.id !== id);
-      this.filtered = this.contacts;
+      await this.get();
+      // this.contacts = this.contacts.filter((item) => item.id !== id);
+      // this.filtered = this.contacts;
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -68,10 +69,12 @@ export const contactsStore = makeAutoObservable({
         await contactAPI.delete(id);
       }
 
-      this.contacts = this.contacts.filter(
-        (item) => !arrayId.includes(item.id)
-      );
-      this.filtered = this.contacts;
+      await this.get();
+
+      // this.contacts = this.contacts.filter(
+      //   (item) => !arrayId.includes(item.id)
+      // );
+      // this.filtered = this.contacts;
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -126,12 +129,18 @@ export const contactsStore = makeAutoObservable({
 
   async uploadFile(file) {
     try {
+      let pagination = {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      };
       this.setLoading();
       const formData = new FormData();
       formData.append("contacts", file);
       const data = await contactAPI.upload(formData);
       // this.contacts = data.data;
       // this.filtered = this.contacts;
+      await this.get(pagination, "");
       this.setLoading();
     } catch (e) {
       this.setLoading();
