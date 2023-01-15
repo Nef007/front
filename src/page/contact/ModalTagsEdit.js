@@ -26,8 +26,8 @@ export const ModalTagsEdit = ({
           <div className="mb-3">
             <Tagify
               defaultValue={form.tags}
-              onAdd={onChange}
-              onRemove={onChange}
+              onChange={onChange}
+             // onRemove={onChange}
             />
           </div>
           <div className="mb-3">Выбрано контактов: {form.contacts.length}</div>

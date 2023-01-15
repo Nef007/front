@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { contactAPI, tagAPI } from "../api";
+import { tagAPI } from "../api";
 import { notification } from "./notificationStore";
 
 export const tagsStore = makeAutoObservable({
@@ -13,7 +13,6 @@ export const tagsStore = makeAutoObservable({
       this.setLoading();
       const data = await tagAPI.get();
       this.tags = data.data.data;
-      console.log(this.tags);
       this.filtered = this.tags;
       this.setLoading();
     } catch (e) {
@@ -21,14 +20,6 @@ export const tagsStore = makeAutoObservable({
       notification.setInfo("error", e.message);
     }
   },
-  // async get(id) {
-  //   try {
-  //     const data = await tagAPI.get(id);
-  //     this.tag = data.tag;
-  //   } catch (e) {
-  //     notification.setInfo("error", e.message);
-  //   }
-  // },
 
   async save(form) {
     try {
@@ -69,7 +60,6 @@ export const tagsStore = makeAutoObservable({
       for (let id of arrayId) {
         await tagAPI.delete(id);
       }
-      // const data = await tagAPI.deleteArray(arrayId);
       this.tags = this.tags.filter((item) => !arrayId.includes(item.id));
       this.filtered = this.tags;
       this.setLoading();

@@ -4,15 +4,13 @@ import { Title } from "../../components/Title";
 import { PanelHeading } from "../../layout/panel-heading";
 
 import { TableCustom } from "../../components/Table/Table";
-import { useEffect, useRef, useState } from "react";
+import { useEffect,  useState } from "react";
 import { ModalContact } from "./ModalContact";
-import { SelectCustom } from "../../components/CustomSelect/SelectCustom";
+
 import { useToggle } from "react-use";
 import Tagify from "../../components/CustomSelect/Tagify";
 import { Button } from "react-bootstrap";
 import { ModalTagsEdit } from "./ModalTagsEdit";
-import { BASE_URL, contactAPI } from "../../api";
-import download from "downloadjs";
 import { notification } from "../../store/notificationStore";
 const phoneNumberFormatter = require("phone-number-formats");
 
@@ -40,13 +38,18 @@ export const ContactPage = observer(() => {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    tagsStore.get().then(() => contactsStore.getPagination());
+    tagsStore.get().then(() => contactsStore.get());
   }, []);
   useEffect(() => {}, [contactsStore.idLoadingSelect]);
 
   const onTableChange = async (pagination, filters, sorter) => {
-    // console.log(555555, pagination);
-    await contactsStore.get(pagination);
+    contactsStore.setPagination(pagination)
+    await contactsStore.get();
+    setSelectedRowKeys([])
+    setTagsForm({
+      contacts: [],
+      tags: [],
+    })
   };
 
   const onSelectAllRows = () => {
@@ -86,16 +89,18 @@ export const ContactPage = observer(() => {
     }
   };
   const onDownloadFile = async (e) => {
-    // e.preventDefault();
     await contactsStore.downloadExport();
-    //  console.log("44444", data.data);
-
-    //  window.location.href = `${BASE_URL}/contacts/export`;
   };
 
   const onSaveContact = async (e) => {
     e.preventDefault();
     await contactsStore.saveContact({ ...form, tags });
+    setActiveModalCreate(false);
+    setActiveModalEdit(false);
+  };
+  const onSaveContactEdit = async (e) => {
+    e.preventDefault();
+    contactsStore.saveContactFormModal({ ...form, tags });
     setActiveModalCreate(false);
     setActiveModalEdit(false);
   };
@@ -107,23 +112,22 @@ export const ContactPage = observer(() => {
     if (!tagsForm.tags.length) {
       return setAlert("Введите теги");
     }
-    //  console.log({ ...tagsForm });
+
 
     try {
-      for (let item of contactsStore.filtered) {
+      for (let item of contactsStore.contacts) {
         if (tagsForm.contacts.includes(item.id)) {
-          await contactsStore.saveContact({
+          await contactsStore.saveContactFormModalMass({
             ...item,
             tags: [...item.tags, ...tagsForm.tags],
           });
         }
       }
 
-      window.location.reload();
     } catch (e) {
       notification.setInfo("error", e.message);
     }
-    // await contactsStore.addManyTags({ ...tagsForm });
+
     setActiveTagsEdit();
   };
 
@@ -197,12 +201,16 @@ export const ContactPage = observer(() => {
           record && (
             <Tagify
               defaultValue={record.tags}
-              // loading={contactsStore.idLoadingSelect === record.id}
-              onAdd={(value) =>
-                contactsStore.saveContact({ ...record, tags: value })
+              id={record.id}
+              onChange={(value) =>{
+                if(contactsStore.activeTogifi===record.id)
+                  contactsStore.saveContactForm({ ...record, tags: value })
               }
-              onRemove={(value) =>
-                contactsStore.saveContact({ ...record, tags: value })
+
+
+              }
+               onRemove={(value) =>
+                contactsStore.saveContactForm({ ...record, tags: value })
               }
             />
           )
@@ -307,7 +315,7 @@ export const ContactPage = observer(() => {
                   pagination={contactsStore.pagination}
                   columns={columns}
                   loading={contactsStore.loading}
-                  data={contactsStore.filtered}
+                  data={contactsStore.contacts}
                   selectedRowKeys={selectedRowKeys}
                   setSelectedRowKeys={setRowKey}
                 />
@@ -333,7 +341,7 @@ export const ContactPage = observer(() => {
         setForm={setForm}
         tags={tags}
         setTags={setTags}
-        onSubmit={onSaveContact}
+        onSubmit={onSaveContactEdit}
         title="Редактирование контакта"
       />
       <ModalTagsEdit

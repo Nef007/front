@@ -1,10 +1,7 @@
-import { observer } from "mobx-react-lite";
-
-import { useRootStore } from "../store";
 import { NavLink } from "react-router-dom";
 
-export const Header = observer(() => {
-  const { taskStore, notification } = useRootStore();
+export const Header = () => {
+
 
   return (
     <header className="header">
@@ -41,4 +38,4 @@ export const Header = observer(() => {
       </div>
     </header>
   );
-});
+};

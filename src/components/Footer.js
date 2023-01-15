@@ -1,9 +1,6 @@
-import { observer } from "mobx-react-lite";
 
-import { useState } from "react";
-import { useRootStore } from "../store";
-export const Footer = observer(() => {
-  const { taskStore, notification } = useRootStore();
+export const Footer = () => {
+
 
   return (
     <footer className="footer" id="footer">
@@ -21,4 +18,4 @@ export const Footer = observer(() => {
       </div>
     </footer>
   );
-});
+};

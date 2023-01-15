@@ -35,7 +35,6 @@ export const ModalTags = ({
             <label htmlFor="recipient-tag" className="col-form-label">
               Цвет:
             </label>
-            {/*<Colors color={form.color} onChangeComplete={onChangeColor} />*/}
             <input
               onChange={onChange}
               type="color"

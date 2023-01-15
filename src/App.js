@@ -1,6 +1,4 @@
 import "./assets/css/normalize.css";
-//import "./assets/js/bootstrap/bootstrap.bundle.min";
-
 import "react-phone-input-2/lib/style.css";
 import "antd/dist/antd.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -15,7 +13,6 @@ import { TagPage } from "./page/tags/Tag.page";
 import { ContactPage } from "./page/contact/Contact.page";
 import { message } from "antd";
 import { ScrollButton } from "./components/ScrollButton";
-import { Toast, ToastContainer } from "react-bootstrap";
 import { AuthPage } from "./page/auth/Auth.page";
 import { Loader } from "./components/Loader/Loader";
 

@@ -2,8 +2,6 @@ import { Button, Modal } from "react-bootstrap";
 import Tagify from "../../components/CustomSelect/Tagify";
 
 import PhoneInput from "react-phone-input-2";
-import { useState } from "react";
-
 export const ModalContact = ({
   active,
   form,

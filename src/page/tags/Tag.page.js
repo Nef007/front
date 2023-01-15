@@ -7,7 +7,6 @@ import { useToggle } from "react-use";
 
 export const TagPage = observer(() => {
   const { tagsStore } = useRootStore();
-  // const [activeCreate, setActiveCreate] = useToggle(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [activeModalEdit, setActiveModalEdit] = useToggle(false);
   const [activeModalCreate, setActiveModalCreate] = useToggle(false);

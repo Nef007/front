@@ -11,7 +11,6 @@ export const TableCustom = ({
   onTableChange,
 }) => {
   const onSelectChange = (newSelectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 

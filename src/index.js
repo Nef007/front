@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 import React from "react";
 import { rootStore, RootStoreProvider } from "./store";
-import { BrowserRouter, HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { App } from "./App";

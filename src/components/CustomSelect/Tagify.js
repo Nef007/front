@@ -1,19 +1,41 @@
 import Tags from "@yaireo/tagify/dist/react.tagify";
-import { useCallback } from "react";
+import {useCallback, useEffect, useState} from "react";
 import { observer } from "mobx-react-lite";
 import { useRootStore } from "../../store";
 
-// A React component for a tagify "tag"
-
 const Tagify = observer(
   ({
+      id,
     defaultValue = [],
     loading,
     onChange = () => {},
-    onAdd = () => {},
     onRemove = () => {},
   }) => {
-    const { tagsStore } = useRootStore();
+    const { tagsStore, contactsStore } = useRootStore();
+
+    const [value, setValue] = useState(defaultValue.map((item) => ({
+        value: item.text,
+        id: item.id,
+        color: item.color,
+    })));
+
+
+
+    useEffect(()=>{
+
+        if(contactsStore.idLoadingSelect.includes(id)){
+            setValue(defaultValue.map((item) => ({
+                value: item.text,
+                id: item.id,
+                color: item.color,
+            })))
+
+        }
+
+
+
+    },[contactsStore.contacts])
+
 
     const setting = {
       delimiters: ",| ", // [RegEx] split tags by any of these delimiters ("null" to cancel) Example: ",| |."
@@ -23,7 +45,7 @@ const Tagify = observer(
       // callbacks: {}, // Exposed callbacks object to be triggered on certain events
       //  addTagOnBlur: true, // automatically adds the text which was inputed as a tag when blur event happens
       // onChangeAfterBlur: true, // By default, the native way of inputs' onChange events is kept, and it only fires when the field is blured.
-      duplicates: false, // "true" - allow duplicate tags
+      duplicates: true, // "true" - allow duplicate tags
       whitelist: tagsStore.tags.map((item) => ({
         id: item.id,
         value: item.text,
@@ -39,7 +61,7 @@ const Tagify = observer(
       backspace: false, // false / true / "edit"
       // skipInvalid: false, // If `true`, do not add invalid, temporary, tags before automatically removing them
       //  pasteAsTags: true, // automatically converts pasted text into tags. if "false", allows for further text editing
-
+        showFilteredDropdown: "a",
       dropdown: {
         enabled: 1, // show suggestion after 1 typed character
         fuzzySearch: false, // match only suggestions that starts with the typed characters
@@ -75,74 +97,37 @@ const Tagify = observer(
       // tagData.color = getRandomColor();
       tagData.style = "--tag-bg:" + tagData.color;
     }
-    const onChangeT = (e) => {
-      console.log("CHANGED:", e.detail.tagify.getCleanValue());
-      return {
-        target: {
-          name: "tags",
-          value: e.detail.tagify.getCleanValue().map((item) => ({
-            id: item.id,
-            color: item.color,
-            text: item.value,
-          })),
-        },
-      };
-    };
 
-    const onAddT = (e) => {
-      console.log("ADD:", e);
-      onAdd(e.detail.data);
-    };
-    const onRemoveT = (e) => {
-      console.log("REMOVE:", e.detail.data);
-      onRemove(e.detail.data);
-    };
-    return (
-      <Tags
-        loading={loading}
-        settings={setting}
-        // defaultValue={
-        //   defaultValue &&
-        //   defaultValue.map((item) => ({
-        //     value: item.text,
-        //     id: item.id,
-        //     color: item.color,
-        //   }))
-        // }
-        defaultValue={defaultValue.map((item) => ({
-          value: item.text,
-          id: item.id,
-          color: item.color,
-        }))}
-        onChange={(e) =>
-          onChange(
-            e.detail.tagify.getCleanValue().map((item) => ({
-              id: item.id,
-              color: item.color,
-              text: item.value,
-            }))
-          )
-        }
-        // autoFocus={true}
-        onAdd={(e) =>
-          onAdd(
-            e.detail.tagify.getCleanValue().map((item) => ({
-              id: item.id,
-              color: item.color,
-              text: item.value,
-            }))
-          )
-        }
-        onRemove={(e) =>
-          onRemove(
-            e.detail.tagify.getCleanValue().map((item) => ({
-              id: item.id,
-              color: item.color,
-              text: item.value,
-            }))
-          )
-        }
-      />
+
+    return (<>
+          <Tags
+              loading={loading}
+              settings={setting}
+              value={value}
+              onRemove={(e) => onRemove(
+                  e.detail.tagify.getCleanValue().map((item) => ({
+                      id: item.id,
+                      color: item.color,
+                      text: item.value,
+                  }))
+              )}
+              onFocus={()=>contactsStore.setActiveTogifi(id)}
+              onBlur={()=>contactsStore.setActiveTogifi('')}
+              onChange={(e) =>
+                      onChange(
+                          e.detail.tagify.getCleanValue().map((item) => ({
+                              id: item.id,
+                              color: item.color,
+                              text: item.value,
+                          }))
+                      )
+
+
+              }
+
+          />
+    </>
+
     );
   }
 );
