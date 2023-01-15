@@ -55,7 +55,7 @@ export const ModalContact = ({
             <label htmlFor="recipient-phone" className="col-form-label">
               Телефон:
             </label>
-            <input   autoComplete="disabled" type="tel" name="phone"  onChange={onChange} className="form-control" id="recipient-phone"/>
+            <input   autoComplete="disabled" type="tel" name="phone"   value={form.phone}  onChange={onChange} className="form-control" id="recipient-phone"/>
             {/*<PhoneInput*/}
             {/*  inputProps={{*/}
             {/*    className: "form-control",*/}

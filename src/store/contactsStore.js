@@ -33,7 +33,7 @@ setActiveTogifi(value){
      let response = await contactAPI.download(this.search);
       download(response.data, "contacts.xlsx");
     } catch (e) {
-      notification.setInfo("error", e.message);
+      notification.setInfo("error", "Слишком большая выборка, попробуйте изменить запрос");
     }
   },
 
