@@ -3,7 +3,7 @@ import "./signin.css";
 import { useRootStore } from "../../store";
 import { useState } from "react";
 export const AuthPage = observer(() => {
-  const { authStore, notification } = useRootStore();
+  const { authStore } = useRootStore();
 
   const [password, setPassword] = useState("");
 

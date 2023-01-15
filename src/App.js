@@ -17,7 +17,7 @@ import { AuthPage } from "./page/auth/Auth.page";
 import { Loader } from "./components/Loader/Loader";
 
 export const App = observer(() => {
-  const { notification, authStore, contactsStore } = useRootStore();
+  const { notification, authStore } = useRootStore();
   const { info } = notification;
 
   useEffect(() => {

@@ -45,7 +45,7 @@ export const tagsStore = makeAutoObservable({
   async delete(id) {
     try {
       this.setLoading();
-      const data = await tagAPI.delete(id);
+      await tagAPI.delete(id);
       this.tags = this.tags.filter((item) => item.id !== id);
       this.filtered = this.tags;
       this.setLoading();

@@ -1,5 +1,5 @@
 import Tags from "@yaireo/tagify/dist/react.tagify";
-import {useCallback, useEffect, useState} from "react";
+import { useEffect, useState} from "react";
 import { observer } from "mobx-react-lite";
 import { useRootStore } from "../../store";
 
