@@ -131,9 +131,10 @@ export const ContactPage = observer(() => {
     setActiveTagsEdit();
   };
 
-  const onSearch = (e) => {
+  const onSearch = async (e) => {
     e.preventDefault();
-    contactsStore.onSearch(valueSearch);
+   await contactsStore.onSearch(valueSearch);
+
   };
   const onDeleteContact = () => {
     contactsStore.deleteArray(selectedRowKeys);
@@ -166,12 +167,12 @@ export const ContactPage = observer(() => {
       title: "ID",
       dataIndex: "id",
       key: "id",
-      sorter: (a, b) => a.id - b.id,
+    //  sorter: (a, b) => a.id - b.id,
     },
     {
       title: "Имя",
       dataIndex: "firstname",
-      sorter: (a, b) => a.firstname.localeCompare(b.firstname),
+    //  sorter: (a, b) => a.firstname.localeCompare(b.firstname),
     },
     {
       title: "Почта",

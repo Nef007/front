@@ -174,7 +174,7 @@ setActiveTogifi(value){
       const formData = new FormData();
       formData.append("contacts", file);
       await contactAPI.upload(formData);
-      await this.get();
+      window.location.reload()
       this.setLoading();
     } catch (e) {
       this.setLoading();
@@ -197,7 +197,8 @@ setActiveTogifi(value){
 
   async onSearch(value) {
     this.search = value;
-    await this.get();
+    this.setPagination({...this.pagination, current: 1 })
+    await this.get(0);
   },
 
   setLoading() {
