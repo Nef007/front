@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { tagAPI } from "../api";
 import { notification } from "./notificationStore";
+import {contactsStore} from "./contactsStore";
 
 export const tagsStore = makeAutoObservable({
   tags: [],
@@ -36,6 +37,7 @@ export const tagsStore = makeAutoObservable({
         const data = await tagAPI.create(form);
         this.tags = [...this.tags, data.data];
       }
+     await contactsStore.get()
       this.filtered = this.tags;
       this.setLoading();
     } catch (e) {
