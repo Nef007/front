@@ -181,12 +181,12 @@ export const ContactPage = observer(() => {
     {
       title: "Телефон",
       dataIndex: "phone",
-      render: (text) =>
-        text &&
-        new phoneNumberFormatter(text).format({
-          type: "international",
-          separator: " ",
-        }).string,
+      // render: (text) =>
+      //   text &&
+        // new phoneNumberFormatter(text).format({
+        //   type: "international",
+        //   separator: " ",
+        // }).string,
     },
     {
       title: "Теги",
